@@ -29,4 +29,3 @@ const AlbumSchema = mongoose.Schema({
 }, {timestamps: true});
 
 const Album = mongoose.model('Album', AlbumSchema);
-export default Album;
