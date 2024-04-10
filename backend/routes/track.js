@@ -1,5 +1,5 @@
 const express = require("express");
-const { getTracks, uploadTrack, deleteTrack } = require("../controllers/track.controller");
+const { getTracks, uploadTrack, deleteTrack, updateTrack } = require("../controllers/track.controller");
 const router = express.Router();
 const multer = require('multer');
 const path = require('path');
@@ -18,6 +18,6 @@ const upload = multer({ storage })
 router.get("/get", getTracks);
 router.post("/post",upload.single('song') ,uploadTrack) ;
 router.delete("/delete/:id", deleteTrack);
-router.put("/update/:id",upload.single('song') , uploadTrack);
+router.put("/update/:id",upload.single('song') , updateTrack);
 
 module.exports = router; 
