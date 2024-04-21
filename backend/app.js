@@ -2,6 +2,7 @@ const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
 const trackRoutes = require("./routes/track.js");
+const searchRoutes = require("./routes/search.js");
 const bodyParser = require("body-parser");
 require("dotenv").config();
 const app = express();
@@ -13,6 +14,7 @@ app.use(bodyParser.json())
 app.use(cors());
 app.use('/track', express.static(path.join(__dirname, 'track')));
 app.use("/song", trackRoutes);
+app.use('/search', searchRoutes);
 
 // Updated Mongoose connection with deprecation warnings fixed
 mongoose.connect(process.env.MONGODB_URI, {

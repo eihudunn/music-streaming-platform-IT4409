@@ -6,6 +6,9 @@ const AlbumSchema = mongoose.Schema({
         required: true,
         unique: true,
     },
+    searchTitle: {
+        type: String,
+    },
     artist: {
         type: String,
         required: true,
