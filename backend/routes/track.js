@@ -16,7 +16,7 @@ const upload = multer({ storage })
 
 
 router.get("/get", getTracks);
-router.post("/post",upload.single('song') ,uploadTrack) ;
+router.post("/post",upload.single('song') ,uploadTrack);
 router.delete("/delete/:id", deleteTrack);
 router.put("/update/:id",upload.single('song') , updateTrack);
 

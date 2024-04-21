@@ -4,6 +4,7 @@ const User = require('../schemas/user.js');
 const path = require('path');
 const fs = require('fs');
 const { model } = require('mongoose');
+const { tolowercaseVNese } = require('../helper/vietnameseTextToLowerCase.js');
 
 const getTracks = async (req, res) => {
     try {
@@ -18,7 +19,8 @@ const uploadTrack = async (req, res) => {
     try {
         let track = new Track({
             title: req.body.title,
-            artist: req.body.artist,
+            artist: req.body.artist,    
+            searchTitle: req.body.title.tolowercaseVNese(),
             href: '/track/' + req.file.filename,
             album: req.body.album,
             genre: req.body.genre,

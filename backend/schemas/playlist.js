@@ -1,7 +1,11 @@
 const mongoose = require('mongoose');
+const { search } = require('../routes/track');
 
 const PlaylistSchema = mongoose.Schema({
     title: {
+        type: String,
+    },
+    searchTitle: {
         type: String,
     },
     user: {
