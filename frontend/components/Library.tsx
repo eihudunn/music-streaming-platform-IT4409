@@ -1,9 +1,12 @@
+import useUploadModal from "@/hooks/useUploadModal";
 import { AiOutlinePlus } from "react-icons/ai";
 import { TbPlaylist } from "react-icons/tb";
 
 const Library = () => {
+    const uploadModal = useUploadModal();
+
     const onClick = () => {
-        //handle later
+        return uploadModal.onOpen();
     };
 
   return (
