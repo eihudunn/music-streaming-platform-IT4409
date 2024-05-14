@@ -28,6 +28,16 @@ const UserSchema = mongoose.Schema({
     albumsFollowed: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Album'
+    }],
+    preferedGenre: [{
+        genre: {
+            type: String,
+            required: true
+        },
+        weight: {
+            type: Number,
+            required: true
+        }
     }]
 }, {timestamps: true});
 
