@@ -18,6 +18,9 @@ const TrackSchema = mongoose.Schema({
     href: {
         type: String,
     },
+    img: {
+        type: String,
+    },
     album: {
         type: String,
     },

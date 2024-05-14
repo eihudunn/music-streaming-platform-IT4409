@@ -24,11 +24,19 @@ const getTracks = async (req, res) => {
 
 const uploadTrack = async (req, res) => {
     try {
-        let hrefLink = './services/track/' + req.file.filename;
-        console.log(hrefLink);
-        const uploadResult = await cloudinary.uploader.upload(hrefLink, { resource_type: 'raw' });
-        console.log(uploadResult);
+        let hrefLink = './services/temp/' + req.files.song[0].filename;
+        let imgLink = './services/temp/' + req.files.img[0].filename;
+
+        const uploadHrefResult = await cloudinary.uploader.upload(hrefLink, { resource_type: 'raw' });
         fs.unlink(hrefLink, err => {
+            if (err) {
+                console.error(err);
+                return res.status(500).json({ message: err.message });
+            }
+        });
+
+        const uploadImgResult = await cloudinary.uploader.upload(imgLink, { resource_type: 'image' });
+        fs.unlink(imgLink, err => {
             if (err) {
                 console.error(err);
                 return res.status(500).json({ message: err.message });
@@ -38,15 +46,15 @@ const uploadTrack = async (req, res) => {
             title: req.body.title,
             artist: req.body.artist,    
             searchTitle: toLowerCaseNonAccentVietnamese(req.body.title),
-            href: uploadResult.secure_url,
+            href: uploadHrefResult.secure_url,
+            img: uploadImgResult.secure_url, 
             album: req.body.album,
             genre: req.body.genre,
             plays: 0,
             likes: 0,
             comments: []
         });
-        
-
+       
         track.save(function (err) {
             if (err) {
                 res.status(500).json({ message: err.message });
@@ -59,6 +67,31 @@ const uploadTrack = async (req, res) => {
         res.status(500).json({ message: error.message });
     }
 };
+// const uploadTrack = (req, res) => {
+//     try {
+//     console.log("Chạy api này");
+//       // req.file is the `song` file
+//       // req.file is the `img` file
+//       const songFile = req.file.filename;
+//       //const imgFile = req.file['img'];
+  
+//       // Print file information for debugging
+//       console.log(songFile);
+//       //console.log(imgFile);
+  
+//       // Send response
+//       res.json({
+//         message: 'Files uploaded successfully',
+//         songFile: songFile,
+//         //imgFile: imgFile
+//       });
+//     } catch (err) {
+//       console.error(err);
+//       res.status(500).json({ error: 'Error uploading files' });
+//     }
+//   };
+
+
 const updateTrack = async (req, res) => {
     try {
         const track = await Track.findById(req.params.id);
