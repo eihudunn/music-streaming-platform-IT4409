@@ -1,12 +1,13 @@
-import getSongs from "@/actions/getSongs";
 import Header from "@/components/Header";
 import ListItem from "@/components/ListItem";
 import PageContent from "./components/PageContent";
 import fakeGetSong from "@/actions/api/getSong";
+import { connectDB } from "../_utils/database";
 
-export const revalidate = 0;
+export const revalidate = 1;
 
 export default async function Home() {
+  const db = connectDB();
   // const songs = await getSongs();
   const songs = fakeGetSong();
   return (
