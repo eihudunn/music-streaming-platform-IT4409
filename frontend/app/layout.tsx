@@ -4,6 +4,7 @@ import "./globals.css";
 import Sidebar from "@/components/Sidebar";
 import ModalProvider from "@/providers/ModalProvider";
 import fakeGetSongById from "@/actions/api/getSongByUserId";
+import { NextAuthProvider } from "@/providers/AuthProvider";
 
 const font = Figtree({ subsets: ["latin"] });
 
@@ -24,11 +25,11 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={font.className}>
-        <ModalProvider />
-        <Sidebar songs={userSong}> 
-          {children}
-        </Sidebar>
-        </body>
+        <NextAuthProvider>
+          <ModalProvider />
+          <Sidebar songs={userSong}>{children}</Sidebar>
+        </NextAuthProvider>
+      </body>
     </html>
   );
 }
