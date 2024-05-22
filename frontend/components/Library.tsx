@@ -16,7 +16,6 @@ const Library: React.FC<LibraryProps> = ({ songs }) => {
     return uploadModal.onOpen();
   };
 
-  console.log(songs);
   const onPlay = useOnPlay(songs);
 
   return (
