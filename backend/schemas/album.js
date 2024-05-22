@@ -9,9 +9,17 @@ const AlbumSchema = mongoose.Schema({
     searchTitle: {
         type: String,
     },
+    img: {
+        type: String,
+        required: true,
+    },
     artist: {
         type: String,
         required: true,
+    },
+    artistId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
     },
     genre: {
         type: String,
