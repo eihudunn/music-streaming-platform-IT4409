@@ -1,0 +1,19 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html,
+body,
+:root {
+  height:  100%;
+  background-color: black;
+  color-scheme: dark;
+}
+
+.loginRegion {
+  background: linear-gradient(rgba(255, 255, 255, 0.178) 0%, rgb(0, 0, 0) 100%);
+}
+
+.loginButton {
+  background-color: #1ed760;
+}
