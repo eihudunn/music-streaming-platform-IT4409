@@ -198,4 +198,28 @@ const trackSuggestion = async (req, res) => {
         res.status(500).json({ message: error.message });
     }
 }
-module.exports = { getTracks, uploadTrack, deleteTrack, updateTrack, trackSuggestion };
+
+const playTrack = async (req, res) => {
+    try {
+        const { trarkId, userId } = req.body;
+        const track = await Track.findById(trarkId);
+        track.plays++;
+        await track.save();
+        const user = await User.findById(userId);
+        user.preferedGenre = user.preferedGenre.map(g => {
+            if (g.genre === track.genre) {
+                g.weight++;
+            } else {
+                preferedGenre.push({
+                    genre: track.genre,
+                    weight: 1
+                })
+            }
+            return g;
+        });
+        res.json({ message: 'Track played successfully!', track });
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+}
+module.exports = { getTracks, uploadTrack, deleteTrack, updateTrack, trackSuggestion, playTrack };
