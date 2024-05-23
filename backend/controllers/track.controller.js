@@ -156,18 +156,44 @@ const trackSuggestion = async (req, res) => {
         oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
         const id = req.params.id;
         const user = await User.findById(id);
+        const MostPopularTracks = await Track.find().sort({ plays: -1, likes: -1 }).limit(10);
+        const HotTracks = await Track.find(
+            {
+                createdAt: {
+                    $gte: oneWeekAgo,
+                },
+            }
+        ).sort({ likes: -1, plays: -1 }).limit(10);
         if (!id || !user) {
-            const MostPopularTracks = await Track.find().sort({ plays: -1, likes: -1 }).limit(10);
-            const HotTracks = await Track.find(
-                {
-                    createdAt: {
-                        $gte: oneWeekAgo,
-                    },
-                }
-            ).sort({ likes: -1, plays: -1 }).limit(10);
             return res.json({ MostPopularTracks, HotTracks });
         } else {
-            
+            const artistFollowed = user.artistFollowed;
+            let artistFollowedTracks = [];
+            for (let i = 0; i < artistFollowed.length; i++) {
+                const artistTracks = await Track.find({ 
+                    id: artistFollowed[i],
+                    createdAt: {
+                        $gte: oneWeekAgo,
+                    }
+                }).sort({ likes: -1, plays: -1 }).limit(10);
+                artistFollowedTracks = artistFollowedTracks.concat(artistTracks);
+            }
+
+            const favouriteGenre = user.genre;
+            let favouriteGenreTracks = [];
+            for (let i = 0; i < favouriteGenre.length; i++) {
+                const genreTracks = await Track.find({ 
+                    genre: favouriteGenre[i],
+                    createdAt: {
+                        $gte: oneWeekAgo,
+                    }
+                }).sort({ likes: -1, plays: -1 }).limit(10);
+                favouriteGenreTracks = favouriteGenreTracks.concat({
+                    genre: favouriteGenre[i],
+                    tracks: genreTracks
+                });
+            }
+            res.json({ MostPopularTracks, HotTracks, artistFollowedTracks, favouriteGenreTracks });
         }
     } catch (error) {
         res.status(500).json({ message: error.message });
