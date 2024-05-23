@@ -17,7 +17,7 @@ const upload = multer({ storage });
 router.get("/get", getTracks);
 router.post("/post", upload.fields([{ name: 'song'}, {name: 'img' }]) ,uploadTrack);
 router.delete("/delete/:id", deleteTrack);
-router.put("/update/:id", upload.fields([{ name: 'song'}, {name: 'img' }])  , updateTrack);
+router.post("/update/:id", upload.fields([{ name: 'song'}, {name: 'img' }])  , updateTrack);
 router.get("/suggestion/&userid=:id", trackSuggestion);
 router.post("/play", playTrack);
 

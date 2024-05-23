@@ -1,4 +1,5 @@
 const Track = require('../schemas/track.js');
+const mongoose = require('mongoose');
 const Album = require('../schemas/album.js');
 const User = require('../schemas/user.js');
 const path = require('path');
@@ -33,6 +34,7 @@ const uploadTrack = async (req, res) => {
                 return res.status(500).json({ message: err.message });
             }
         });
+        console.log(uploadHrefResult.public_id);
 
         const uploadImgResult = await cloudinary.uploader.upload(imgLink, { resource_type: 'image' });
         fs.unlink(imgLink, err => {
@@ -44,6 +46,7 @@ const uploadTrack = async (req, res) => {
         let track = new Track({
             title: req.body.title,
             artist: req.body.artist,
+            artistId: req.body.artistId,
             userId: req.body.userId,
             searchTitle: toLowerCaseNonAccentVietnamese(req.body.title),
             href: uploadHrefResult.secure_url,
@@ -75,15 +78,20 @@ const updateTrack = async (req, res) => {
         if (!track) {
             return res.status(404).json({ message: 'Track not found' });
         }
-        const { title, artist, album, genre, song, img } = req.body;
-        if (title) track.title = title;
+        const { title, artist, album, genre } = req.body;
+        console.log(req.body);
+        if  (title) {
+            track.title = title;
+            track.searchTitle = toLowerCaseNonAccentVietnamese(title);
+        } 
         if (artist) track.artist = artist;
         if (album) track.album = album;
         if (genre) track.genre = genre;
-        if (song) {
+        if (req.files.song[0]) {
             const publicId = track.href.split('/').pop();
             const deletionResult = await cloudinary.uploader.destroy(publicId, { resource_type: 'raw' });
-            if (deletionResult.result !== 'ok') {
+            console.log({deletionResult});
+            if (deletionResult.result !== 'ok' && deletionResult.result !== 'not found') {
                 console.error('Error deleting track from Cloudinary:', deletionResult.error.message);
             }
             let hrefLink = './services/temp/' + req.files.song[0].filename;
@@ -96,10 +104,12 @@ const updateTrack = async (req, res) => {
             });
             track.href = uploadHrefResult.secure_url;
         }
-        if (img) {
-            const publicId = track.img.split('/').pop();
+        if (req.files.img[0]) {
+            const publicId = track.img.split('/').pop().split('.')[0];
+            console.log(publicId);
             const deletionResult = await cloudinary.uploader.destroy(publicId, { resource_type: 'image' });
-            if (deletionResult.result !== 'ok') {
+            console.log(` img deleting error: ${deletionResult}`);
+            if (deletionResult.result !== 'ok' && deletionResult.result !== 'not found') {
                 console.error('Error deleting image from Cloudinary:', deletionResult.error.message);
             }
             let imgLink = './services/temp/' + req.files.img[0].filename;
@@ -128,24 +138,23 @@ const deleteTrack = async (req, res) => {
         if (!track) {
             return res.status(404).json({ message: 'Track not found' });
         }
-        await track.deleteOne();
         const publicTrackId = track.href.split('/').pop();
         const deletionTrackResult = await cloudinary.uploader.destroy(publicTrackId, { resource_type: 'raw' });
-        if (deletionTrackResult.result !== 'ok') {
+        if (deletionTrackResult.result !== 'ok' && deletionTrackResult.result !== 'not found') {
             console.error('Error deleting track from Cloudinary:', deletionTrackResult.error.message);
+            res.status(400).json({ message: "Error deleting track from cloudinary"});
         }
-        const publicImgId = track.img.split('/').pop();
+        const publicImgId = track.img.split('/').pop().split('.')[0];
         const deletionImgResult = await cloudinary.uploader.destroy(publicImgId, { resource_type: 'image' });
-        console.log(deletionImgResult);
-        if (deletionImgResult.result !== 'ok') {
+        if (deletionImgResult.result !== 'ok' && deletionImgResult.result !== 'not found') {
             console.error('Error deleting image from Cloudinary:', deletionImgResult.error.message);
+            res.status(400).json({ message: "Error deleting img from cloudinary"});
         }
-
-        // Respond with success message
+        await track.deleteOne();
         res.status(200).json({ message: 'Track deleted successfully', track });
     } catch (error) {
         console.error('Error deleting track:', error.message);
-        res.status(500).json({ message: 'Internal server error' });
+        res.status(500).json({ message: 'Internal server error',  });
     }
 };
 
@@ -153,6 +162,7 @@ const trackSuggestion = async (req, res) => {
     try {
         const oneWeekAgo = new Date();
         oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
+        oneWeekAgo.setHours(0, 0, 0, 0);
         const id = req.params.id;
         const user = await User.findById(id);
         const MostPopularTracks = await Track.find().sort({ plays: -1, likes: -1 }).limit(10);
@@ -167,28 +177,29 @@ const trackSuggestion = async (req, res) => {
             return res.json({ MostPopularTracks, HotTracks });
         } else {
             const artistFollowed = user.artistFollowed;
+            console.log(artistFollowed)
             let artistFollowedTracks = [];
             for (let i = 0; i < artistFollowed.length; i++) {
                 const artistTracks = await Track.find({ 
-                    id: artistFollowed[i],
+                    artistId: mongoose.Types.ObjectId(artistFollowed[i]),
                     createdAt: {
                         $gte: oneWeekAgo,
                     }
                 }).sort({ likes: -1, plays: -1 }).limit(10);
                 artistFollowedTracks = artistFollowedTracks.concat(artistTracks);
             }
-
-            const favouriteGenre = user.genre;
+            const favouriteGenre = user.preferedGenre;
+            console.log(favouriteGenre);
             let favouriteGenreTracks = [];
             for (let i = 0; i < favouriteGenre.length; i++) {
                 const genreTracks = await Track.find({ 
-                    genre: favouriteGenre[i],
+                    genre: favouriteGenre[i].genre.toString(),
                     createdAt: {
                         $gte: oneWeekAgo,
                     }
                 }).sort({ likes: -1, plays: -1 }).limit(10);
                 favouriteGenreTracks = favouriteGenreTracks.concat({
-                    genre: favouriteGenre[i],
+                    genre: favouriteGenre[i].genre,
                     tracks: genreTracks
                 });
             }
@@ -201,23 +212,27 @@ const trackSuggestion = async (req, res) => {
 
 const playTrack = async (req, res) => {
     try {
-        const { trarkId, userId } = req.body;
-        const track = await Track.findById(trarkId);
+        const { trackId, userId } = req.body;
+        const track = await Track.findById(trackId);
         track.plays++;
         await track.save();
         const user = await User.findById(userId);
+        let genreExists = false;
         user.preferedGenre = user.preferedGenre.map(g => {
             if (g.genre === track.genre) {
                 g.weight++;
-            } else {
-                preferedGenre.push({
-                    genre: track.genre,
-                    weight: 1
-                })
+                genreExists = true;
             }
             return g;
         });
-        res.json({ message: 'Track played successfully!', track });
+        if (!genreExists) {
+            user.preferedGenre.push({
+                genre: track.genre,
+                weight: 1
+            });
+        }
+        await user.save();
+        res.json({ message: 'Track played successfully!', track, user });
     } catch (error) {
         res.status(500).json({ message: error.message });
     }

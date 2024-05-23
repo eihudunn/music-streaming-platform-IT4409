@@ -4,11 +4,13 @@ const User = require('../schemas/user.js');
 const path = require('path');
 const fs = require('fs');
 const { model } = require('mongoose');
+const { toLowerCaseNonAccentVietnamese } = require('../helper/vietnameseTextToLowerCase.js');
+const cloudinary = require('cloudinary').v2;
 
 cloudinary.config({
-    cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
-    api_key: process.env.CLOUDINARY_API_KEY,
-    api_secret: process.env.CLOUDINARY_API_SECRET,
+    cloud_name: 'degxdypyr',
+    api_key: '376626565986285',
+    api_secret: 'BIkyhrU0bwAVPMb0jONzz0mHx_8',
 });
 
 const getAlbums = async (req, res) => {
@@ -32,9 +34,10 @@ const uploadAlbum = async (req, res) => {
         });
         let album = new Album({
             title: req.body.title,
+            searchTitle: toLowerCaseNonAccentVietnamese(req.body.title),
             img: uploadImgResult.secure_url,
             artist: req.body.artist,
-            uploadId: req.body.uploadId,
+            artistId: req.body.uploadId,
             genre: req.body.genre,
             year: req.body.year,
             tracks: req.body.tracks,
@@ -43,7 +46,7 @@ const uploadAlbum = async (req, res) => {
             if (err) {
                 res.status(500).json({ message: err.message });
             } else {
-                res.status(200).json({ message: 'Album uploaded successfully!', album: album });
+                res.status(200).json({ message: 'Album uploaded successfully!', album });
             }
         });
     }
@@ -58,13 +61,13 @@ const deleteAlbum = async (req, res) => {
         if (!album) {
             return res.status(404).json({ message: 'Album not found' });
         }
-        const publicId = album.img.split('/').pop();
+        const publicId = album.img.split('/').pop().split('.')[0];
         const deleteResult = await cloudinary.uploader.destroy(publicId);
-        if (deleteResult.result !== 'ok') {
+        if (deleteResult.result !== 'ok' && deleteResult.result !== 'not found') {
             return res.status(500).json({ message: 'Failed to delete album image from cloudinary', deleteResult });
         }
         album.remove();
-        res.json({ message: 'Album deleted successfully!' });
+        res.json({ message: 'Album deleted successfully!', album });
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
@@ -82,10 +85,10 @@ const updateAlbum = async (req, res) => {
         if (genre) album.genre = genre;
         if (year) album.year = year;
         if (tracks) album.tracks = tracks;
-        if (img) {
-            const publicId = album.img.split('/').pop();
+        if (req.file) {
+            const publicId = album.img.split('/').pop().split('.')[0];
             const deletionResult = await cloudinary.uploader.destroy(publicId, { resource_type: 'image' });
-            if (deletionResult.result !== 'ok') {
+            if (deletionResult.result !== 'ok' && deletionResult.result !== 'not found') {
                 console.error('Error deleting image from Cloudinary:', deletionResult.error.message);
             }
             let imgLink = './services/temp/' + req.file.filename;

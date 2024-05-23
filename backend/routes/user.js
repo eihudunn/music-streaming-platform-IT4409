@@ -9,7 +9,7 @@ const storage = multer.diskStorage({
       cb(null, path.join(path.dirname(__dirname), 'services/temp'))
     },
     filename: function (req, file, cb) {
-      cb(null, Date.now() + '-'+ file.originalname.split(' ').join('_'))
+      cb(null, "id_"+Date.now() +'-'+ file.originalname.split(' ').join('_'))
     }
 })  
 const upload = multer({ storage });

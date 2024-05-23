@@ -8,9 +8,9 @@ const Album = require('../schemas/album.js');
 const cloudinary = require('cloudinary').v2;
 
 cloudinary.config({
-    cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
-    api_key: process.env.CLOUDINARY_API_KEY,
-    api_secret: process.env.CLOUDINARY_API_SECRET,
+    cloud_name: 'degxdypyr',
+    api_key: '376626565986285',
+    api_secret: 'BIkyhrU0bwAVPMb0jONzz0mHx_8',
 });
 
 const getUsers = async (req, res) => {
@@ -65,8 +65,8 @@ const updateUser = async (req, res) => {
             user.username = req.body.username;
             user.searchTitle = toLowerCaseNonAccentVietnamese(req.body.username);
         }
-        if (req.body.avatarImg) {
-            let publicId = user.avatarImg.split('/').pop();
+        if (req.file) {
+            let publicId = user.avatarImg.split('/').pop().split('.')[0];
             await cloudinary.uploader.destroy(publicId);
             let avatarLink = './services/temp/' + req.file.filename;
             const uploadImgResult = await cloudinary.uploader.upload(avatarLink, { resource_type: 'image' });
@@ -98,7 +98,7 @@ const deleteUser = async (req, res) => {
         if (!user) {
             return res.status(404).json({ message: 'User not found' });
         }
-        let publicId = user.avatarImg.split('/').pop();
+        let publicId = user.avatarImg.split('/').pop().split('.')[0];
         await cloudinary.uploader.destroy(publicId);
         if (user.playlists.length > 0) {
             user.playlists.forEach(async playlist => {
@@ -115,7 +115,7 @@ const deleteUser = async (req, res) => {
             if (err) {
                 res.status(500).json({ message: err.message });
             } else {
-                res.json({ message: 'User deleted successfully' });
+                res.json({ message: 'User deleted successfully', user });
             }
         });
     } catch (error) {
@@ -125,15 +125,22 @@ const deleteUser = async (req, res) => {
 
 const followArtist = async (req, res) => {
     try {
-        let user = await User.findById(req.params.userId);
+        let user = await User.findById(req.body.userId);
         let artist = await User.findById(req.body.artistId);
+
         if (!user) {
             return res.status(404).json({ message: 'User not found' });
         }
         if (!artist) {
             return res.status(404).json({ message: 'Artist not found' });
         }
-        user.artistFollowed.push(artist._id);
+        if (!user.artistFollowed.includes(artist._id.toString())) {
+            user.artistFollowed.push(artist._id);
+        } 
+        if (!artist.following.includes(user._id.toString())) {
+            artist.following.push(user._id);
+        }
+        artist.save();
         user.save(function (err) {
             if (err) {
                 res.status(500).json({ message: err.message });
@@ -149,9 +156,11 @@ const followArtist = async (req, res) => {
 
 const unfollowArtist = async (req, res) => {
     try {
-        let user = await User.findById(req.params.userId);
+        let user = await User.findById(req.body.userId);
         let artist = await User.findById(req.body.artistId);
-        user.artistFollowed = user.artistFollowed.filter(artistId => artistId !== artist._id);
+        user.artistFollowed = user.artistFollowed.filter(artistId => artistId.toString() !== artist._id.toString() );
+        artist.following = artist.following.filter(userId => userId.toString()  !== user._id.toString());
+        artist.save();
         user.save(function (err) {
             if (err) {
                 res.status(500).json({ message: err.message });
@@ -166,7 +175,7 @@ const unfollowArtist = async (req, res) => {
 
 const followAlbum = async (req, res) => {
     try {
-        let user = await User.findById(req.params.userId);
+        let user = await User.findById(req.body.userId);
         let album = await Album.findById(req.body.albumId);
         if (!user) {
             return res.status(404).json({ message: 'User not found' });
@@ -190,9 +199,9 @@ const followAlbum = async (req, res) => {
 
 const unfollowAlbum = async (req, res) => {
     try {
-        let user = await User.findById(req.params.userId);
+        let user = await User.findById(req.body.userId);
         let album = await Album.findById(req.body.albumId);
-        user.albumsFollowed = user.albumsFollowed.filter(albumId => albumId !== album._id);
+        user.albumsFollowed = user.albumsFollowed.filter(albumId => albumId.toString() !== album._id.toString());
         user.save(function (err) {
             if (err) {
                 res.status(500).json({ message: err.message });
