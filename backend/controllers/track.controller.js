@@ -131,7 +131,6 @@ const deleteTrack = async (req, res) => {
         await track.deleteOne();
         const publicTrackId = track.href.split('/').pop();
         const deletionTrackResult = await cloudinary.uploader.destroy(publicTrackId, { resource_type: 'raw' });
-        console.log(deletionTrackResult);
         if (deletionTrackResult.result !== 'ok') {
             console.error('Error deleting track from Cloudinary:', deletionTrackResult.error.message);
         }

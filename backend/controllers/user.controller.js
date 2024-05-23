@@ -1,5 +1,3 @@
-const Track = require('../schemas/track.js');
-const Album = require('../schemas/album.js');
 const User = require('../schemas/user.js');
 const Playlist = require('../schemas/playlist.js');
 const path = require('path');
@@ -66,7 +64,9 @@ const updateUser = async (req, res) => {
             user.username = req.body.username;
             user.searchTitle = toLowerCaseNonAccentVietnamese(req.body.username);
         }
-        if (req.file) {
+        if (req.body.avatarImg) {
+            let publicId = user.avatarImg.split('/').pop();
+            await cloudinary.uploader.destroy(publicId);
             let avatarLink = './services/temp/' + req.file.filename;
             const uploadImgResult = await cloudinary.uploader.upload(avatarLink, { resource_type: 'image' });
             fs.unlink(avatarLink, err => {
@@ -97,9 +97,7 @@ const deleteUser = async (req, res) => {
         if (!user) {
             return res.status(404).json({ message: 'User not found' });
         }
-        let avatarImg = user.avatarImg;
-        let publicId = avatarImg.split('/');
-        publicId = publicId[publicId.length - 1].split('.')[0];
+        let publicId = user.avatarImg.split('/').pop();
         await cloudinary.uploader.destroy(publicId);
         if (user.playlists.length > 0) {
             user.playlists.forEach(async playlist => {
@@ -107,9 +105,7 @@ const deleteUser = async (req, res) => {
                 if (!userPlaylist) {
                     return res.status(404).json({ message: 'Playlist not found' });
                 }
-                let img = userPlaylist.img;
-                let publicId = img.split('/');
-                publicId = publicId[publicId.length - 1].split('.')[0];
+                let img = userPlaylist.img.split('/').pop();
                 await cloudinary.uploader.destroy(publicId);
                 userPlaylist.remove();
             });
