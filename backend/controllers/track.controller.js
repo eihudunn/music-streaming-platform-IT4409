@@ -3,14 +3,13 @@ const Album = require('../schemas/album.js');
 const User = require('../schemas/user.js');
 const path = require('path');
 const fs = require('fs');
-const { model } = require('mongoose');
 const { toLowerCaseNonAccentVietnamese } = require('../helper/vietnameseTextToLowerCase.js');
 const cloudinary = require('cloudinary').v2;
 
 cloudinary.config({
-    cloud_name: 'degxdypyr',
-    api_key: 376626565986285,
-    api_secret: 'BIkyhrU0bwAVPMb0jONzz0mHx_8',
+    cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+    api_key: process.env.CLOUDINARY_API_KEY,
+    api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 
 const getTracks = async (req, res) => {
@@ -44,17 +43,18 @@ const uploadTrack = async (req, res) => {
         });
         let track = new Track({
             title: req.body.title,
-            artist: req.body.artist,    
+            artist: req.body.artist,
+            userId: req.body.userId,
             searchTitle: toLowerCaseNonAccentVietnamese(req.body.title),
             href: uploadHrefResult.secure_url,
-            img: uploadImgResult.secure_url, 
+            img: uploadImgResult.secure_url,
             album: req.body.album,
             genre: req.body.genre,
             plays: 0,
             likes: 0,
             comments: []
         });
-       
+
         track.save(function (err) {
             if (err) {
                 res.status(500).json({ message: err.message });
@@ -67,29 +67,6 @@ const uploadTrack = async (req, res) => {
         res.status(500).json({ message: error.message });
     }
 };
-// const uploadTrack = (req, res) => {
-//     try {
-//     console.log("Chạy api này");
-//       // req.file is the `song` file
-//       // req.file is the `img` file
-//       const songFile = req.file.filename;
-//       //const imgFile = req.file['img'];
-  
-//       // Print file information for debugging
-//       console.log(songFile);
-//       //console.log(imgFile);
-  
-//       // Send response
-//       res.json({
-//         message: 'Files uploaded successfully',
-//         songFile: songFile,
-//         //imgFile: imgFile
-//       });
-//     } catch (err) {
-//       console.error(err);
-//       res.status(500).json({ error: 'Error uploading files' });
-//     }
-//   };
 
 
 const updateTrack = async (req, res) => {
@@ -98,28 +75,42 @@ const updateTrack = async (req, res) => {
         if (!track) {
             return res.status(404).json({ message: 'Track not found' });
         }
-        const { title, artist, album, genre, song } = req.body;
+        const { title, artist, album, genre, song, img } = req.body;
         if (title) track.title = title;
         if (artist) track.artist = artist;
         if (album) track.album = album;
         if (genre) track.genre = genre;
         if (song) {
-            const publicId = track.href.split('/').pop(); 
+            const publicId = track.href.split('/').pop();
             const deletionResult = await cloudinary.uploader.destroy(publicId, { resource_type: 'raw' });
             if (deletionResult.result !== 'ok') {
                 console.error('Error deleting track from Cloudinary:', deletionResult.error.message);
             }
-            let hrefLink = './services/track/' + req.file.filename;
-            console.log(hrefLink);
-            const uploadResult = await cloudinary.uploader.upload(hrefLink, { resource_type: 'raw' });
-            console.log(uploadResult);
+            let hrefLink = './services/temp/' + req.files.song[0].filename;
+            const uploadHrefResult = await cloudinary.uploader.upload(hrefLink, { resource_type: 'raw' });
             fs.unlink(hrefLink, err => {
                 if (err) {
                     console.error(err);
                     return res.status(500).json({ message: err.message });
                 }
             });
-            track.href = uploadResult.secure_url;
+            track.href = uploadHrefResult.secure_url;
+        }
+        if (img) {
+            const publicId = track.img.split('/').pop();
+            const deletionResult = await cloudinary.uploader.destroy(publicId, { resource_type: 'image' });
+            if (deletionResult.result !== 'ok') {
+                console.error('Error deleting image from Cloudinary:', deletionResult.error.message);
+            }
+            let imgLink = './services/temp/' + req.files.img[0].filename;
+            const uploadImgResult = await cloudinary.uploader.upload(imgLink, { resource_type: 'image' });
+            fs.unlink(imgLink, err => {
+                if (err) {
+                    console.error(err);
+                    return res.status(500).json({ message: err.message });
+                }
+            });
+            track.img = uploadImgResult.secure_url;
         }
         await track.save();
         res.json({ message: 'Track updated successfully!', track });
@@ -132,28 +123,79 @@ const updateTrack = async (req, res) => {
 
 const deleteTrack = async (req, res) => {
     try {
-      const trackId = req.params.id;  
-      const track = await Track.findById(trackId);  
-      if (!track) {
-        return res.status(404).json({ message: 'Track not found' });
-      }
-      await track.deleteOne();  
-      const publicId = track.href.split('/').pop(); 
-      const deletionResult = await cloudinary.uploader.destroy(publicId, { resource_type: 'raw' });
-      console.log(deletionResult);
-        if (deletionResult.result !== 'ok') {
-        console.error('Error deleting track from Cloudinary:', deletionResult.error.message);
-      }
-  
-      // Respond with success message
-      res.status(200).json({ message: 'Track deleted successfully', track });
+        const trackId = req.params.id;
+        const track = await Track.findById(trackId);
+        if (!track) {
+            return res.status(404).json({ message: 'Track not found' });
+        }
+        await track.deleteOne();
+        const publicTrackId = track.href.split('/').pop();
+        const deletionTrackResult = await cloudinary.uploader.destroy(publicTrackId, { resource_type: 'raw' });
+        if (deletionTrackResult.result !== 'ok') {
+            console.error('Error deleting track from Cloudinary:', deletionTrackResult.error.message);
+        }
+        const publicImgId = track.img.split('/').pop();
+        const deletionImgResult = await cloudinary.uploader.destroy(publicImgId, { resource_type: 'image' });
+        console.log(deletionImgResult);
+        if (deletionImgResult.result !== 'ok') {
+            console.error('Error deleting image from Cloudinary:', deletionImgResult.error.message);
+        }
+
+        // Respond with success message
+        res.status(200).json({ message: 'Track deleted successfully', track });
     } catch (error) {
-      console.error('Error deleting track:', error.message);
-      res.status(500).json({ message: 'Internal server error' });
+        console.error('Error deleting track:', error.message);
+        res.status(500).json({ message: 'Internal server error' });
     }
-  };
+};
 
-const trackSuggestion = async(req, res) => {
+const trackSuggestion = async (req, res) => {
+    try {
+        const oneWeekAgo = new Date();
+        oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
+        const id = req.params.id;
+        const user = await User.findById(id);
+        const MostPopularTracks = await Track.find().sort({ plays: -1, likes: -1 }).limit(10);
+        const HotTracks = await Track.find(
+            {
+                createdAt: {
+                    $gte: oneWeekAgo,
+                },
+            }
+        ).sort({ likes: -1, plays: -1 }).limit(10);
+        if (!id || !user) {
+            return res.json({ MostPopularTracks, HotTracks });
+        } else {
+            const artistFollowed = user.artistFollowed;
+            let artistFollowedTracks = [];
+            for (let i = 0; i < artistFollowed.length; i++) {
+                const artistTracks = await Track.find({ 
+                    id: artistFollowed[i],
+                    createdAt: {
+                        $gte: oneWeekAgo,
+                    }
+                }).sort({ likes: -1, plays: -1 }).limit(10);
+                artistFollowedTracks = artistFollowedTracks.concat(artistTracks);
+            }
 
+            const favouriteGenre = user.genre;
+            let favouriteGenreTracks = [];
+            for (let i = 0; i < favouriteGenre.length; i++) {
+                const genreTracks = await Track.find({ 
+                    genre: favouriteGenre[i],
+                    createdAt: {
+                        $gte: oneWeekAgo,
+                    }
+                }).sort({ likes: -1, plays: -1 }).limit(10);
+                favouriteGenreTracks = favouriteGenreTracks.concat({
+                    genre: favouriteGenre[i],
+                    tracks: genreTracks
+                });
+            }
+            res.json({ MostPopularTracks, HotTracks, artistFollowedTracks, favouriteGenreTracks });
+        }
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
 }
-module.exports = { getTracks, uploadTrack, deleteTrack, updateTrack };
+module.exports = { getTracks, uploadTrack, deleteTrack, updateTrack, trackSuggestion };

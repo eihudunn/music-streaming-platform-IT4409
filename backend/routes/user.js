@@ -1,8 +1,8 @@
 const express = require("express");
-const { getTracks, uploadTrack, deleteTrack, updateTrack, trackSuggestion } = require("../controllers/track.controller");
 const router = express.Router();
 const multer = require('multer');
 const path = require('path');
+const { getUsers, postUser, updateUser, deleteUser } = require("../controllers/user.controller");
 
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
@@ -14,10 +14,11 @@ const storage = multer.diskStorage({
 })  
 const upload = multer({ storage });
 
-router.get("/get", getTracks);
-router.post("/post", upload.fields([{ name: 'song'}, {name: 'img' }]) ,uploadTrack);
-router.delete("/delete/:id", deleteTrack);
-router.put("/update/:id", upload.fields([{ name: 'song'}, {name: 'img' }])  , updateTrack);
-router.get("/suggestion/&userid=:id", trackSuggestion);
+router.get("/get", getUsers);
+router.post("/post", upload.single('img'), postUser);
+router.post("/update/:id", upload.single('img'), updateUser);
+router.delete("/delete/:id", deleteUser);
 
-module.exports = router; 
+module.exports = router;
+
+
