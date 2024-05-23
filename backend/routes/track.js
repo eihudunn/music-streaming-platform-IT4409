@@ -1,5 +1,5 @@
 const express = require("express");
-const { getTracks, uploadTrack, deleteTrack, updateTrack, trackSuggestion } = require("../controllers/track.controller");
+const { getTracks, uploadTrack, deleteTrack, updateTrack, trackSuggestion, playTrack } = require("../controllers/track.controller");
 const router = express.Router();
 const multer = require('multer');
 const path = require('path');
@@ -19,5 +19,6 @@ router.post("/post", upload.fields([{ name: 'song'}, {name: 'img' }]) ,uploadTra
 router.delete("/delete/:id", deleteTrack);
 router.put("/update/:id", upload.fields([{ name: 'song'}, {name: 'img' }])  , updateTrack);
 router.get("/suggestion/&userid=:id", trackSuggestion);
+router.post("/play", playTrack);
 
 module.exports = router; 
