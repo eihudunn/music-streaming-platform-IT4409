@@ -4,10 +4,13 @@ import { usePathname } from 'next/navigation';
 import { useMemo } from 'react';
 import { BiSearch } from 'react-icons/bi';
 import { HiHome } from 'react-icons/hi';
+import { twMerge } from "tailwind-merge"
+
 import Box from './Box';
 import SidebarItem from './SidebarItem';
 import Library from './Library';
 import { Song } from '@/scheme/Song';
+import usePlayer from "@/hooks/usePlayer"
 
 interface SidebarProp {
     children: React.ReactNode;
@@ -16,6 +19,7 @@ interface SidebarProp {
 
 const Sidebar: React.FC<SidebarProp> = ({ children, songs }) => {
     const pathname = usePathname();
+    const player = usePlayer();
 
     const routes = useMemo(
     () => [
@@ -36,7 +40,7 @@ const Sidebar: React.FC<SidebarProp> = ({ children, songs }) => {
     );
 
     return (
-    <div className="flex h-full">
+    <div className={twMerge(`flex h-full`,player.activeId && "h-[calc(100%-72px)]")}>
         <div className="hidden md:flex flex-col gap-y-2 bg-black h-full w-[300px] p-2">
             <Box>
                 <div className="flex flex-col gap-y-4 px-5 py-4">
@@ -51,9 +55,14 @@ const Sidebar: React.FC<SidebarProp> = ({ children, songs }) => {
                 <Library songs = {songs} />
             </Box>
         </div>
-        <main className='h-full flex-1 overflow-y-auto py-2'>
+        <main className="h-full flex-1 overflow-y-auto py-2">
             {children}
         </main>
+        {/* <div className="h-full flex-col w-[400px] bg-black p-2">
+            <Box className="overflow-y-auto h-full">
+                <h1>liked song</h1>
+            </Box>
+        </div> */}
     </div>
     );
 };

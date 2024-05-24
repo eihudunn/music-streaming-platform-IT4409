@@ -1,9 +1,12 @@
 import type { Metadata } from "next";
-import { Figtree } from "next/font/google";
+import { Figtree, Play } from "next/font/google";
+
 import "./globals.css";
 import Sidebar from "@/components/Sidebar";
 import ModalProvider from "@/providers/ModalProvider";
 import fakeGetSongById from "@/actions/api/getSongByUserId";
+import { NextAuthProvider } from "@/providers/AuthProvider";
+import PlayingBar from "@/components/musicBar/PlayingBar";
 
 const font = Figtree({ subsets: ["latin"] });
 
@@ -24,11 +27,12 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={font.className}>
-        <ModalProvider />
-        <Sidebar songs={userSong}> 
-          {children}
-        </Sidebar>
-        </body>
+        <NextAuthProvider>
+          <ModalProvider />
+          <Sidebar songs={userSong}>{children}</Sidebar>
+          <PlayingBar songs={userSong}>{children}</PlayingBar>
+        </NextAuthProvider>
+      </body>
     </html>
   );
 }
