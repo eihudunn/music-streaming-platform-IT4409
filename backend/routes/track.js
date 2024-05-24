@@ -7,6 +7,7 @@ const {
   updateTrack,
   trackSuggestion,
   getTracksById,
+  playTrack,
 } = require("../controllers/track.controller");
 
 const router = express.Router();
