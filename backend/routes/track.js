@@ -1,4 +1,5 @@
 const express = require("express");
+
 const {
   getTracks,
   uploadTrack,
@@ -7,6 +8,7 @@ const {
   trackSuggestion,
   getTracksById,
 } = require("../controllers/track.controller");
+
 const router = express.Router();
 const multer = require("multer");
 const path = require("path");
@@ -35,5 +37,6 @@ router.put(
   updateTrack
 );
 router.get("/suggestion/&userid=:id", trackSuggestion);
+router.post("/play", playTrack);
 
 module.exports = router;
