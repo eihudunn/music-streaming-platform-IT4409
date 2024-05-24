@@ -1,18 +1,20 @@
 import { Song } from "@/scheme/Song";
 
 import usePlayer from "./usePlayer";
-import useAuthModal from "./useAuthModal";
 
 const useOnPlay = (songs: Song[]) => {
   const player = usePlayer();
-  const authModal = useAuthModal();
+  //get user auth
 
   const onPlay = (id: string) => {
+    //make non-login cant play
+    //redirect to login
+
     player.setId(id);
     player.setIds(songs.map((song) => song.id));
-  }
+  };
 
   return onPlay;
-}
+};
 
 export default useOnPlay;

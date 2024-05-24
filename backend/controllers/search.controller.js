@@ -6,7 +6,8 @@ const { model } = require('mongoose');
 
 const searchAll = async (req, res) => {
     try {
-        const query = req.query.q;
+        let query = req.params.q;
+        console.log(query);
         query = query.toLowerCase();
         query = query.replace(/-/g, ' ');
         const tracks = await Track.find({ searchTitle: { $regex: query, $options: 'i' } });

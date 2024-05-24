@@ -9,6 +9,7 @@ interface SearchProps {
     title: string;
   };
 }
+export const revalidate = 0;
 
 const Search = async ({ searchParams }: SearchProps) => {
   //TODO: connect api search
