@@ -7,7 +7,7 @@ import ModalProvider from "@/providers/ModalProvider";
 import fakeGetSongById from "@/actions/api/getSongByUserId";
 import { NextAuthProvider } from "@/providers/AuthProvider";
 import { Toaster } from "react-hot-toast";
-import Player from "@/components/Player";
+import Player from "@/components/musicBar/Player";
 
 const font = Figtree({ subsets: ["latin"] });
 

@@ -1,7 +1,7 @@
 "use client";
 
 import { Song } from "@/scheme/Song";
-import MediaItem from "./MediaItem";
+import MediaItem from "../MediaItem";
 import LikeButton from "./LikeButton";
 import { BsPauseFill, BsPlayFill } from "react-icons/bs";
 import { AiFillStepBackward, AiFillStepForward } from "react-icons/ai";
