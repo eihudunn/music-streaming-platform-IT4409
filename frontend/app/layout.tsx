@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
-import { Figtree } from "next/font/google";
+import { Figtree, Play } from "next/font/google";
+
 import "./globals.css";
 import Sidebar from "@/components/Sidebar";
 import ModalProvider from "@/providers/ModalProvider";

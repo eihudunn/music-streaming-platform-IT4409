@@ -17,6 +17,7 @@ interface SidebarProp {
 }
 
 const Sidebar: React.FC<SidebarProp> = ({ children, songs }) => {
+
   const pathname = usePathname();
   const player = usePlayer();
 
