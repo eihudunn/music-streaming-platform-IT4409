@@ -59,3 +59,18 @@ const UserSchema = new Schema(
 
 const User = models.User || mongoose.model("User", UserSchema);
 export default User;
+
+export interface UserDto {
+  username: string;
+  searchTitle?: string;
+  email?: string;
+  password?: string;
+  following?: string[];
+  artistFollowed?: string[];
+  playlists?: string[];
+  albumsFollowed?: string[];
+  preferedGenre?: {
+    genre: string;
+    weight: number;
+  }[];
+}

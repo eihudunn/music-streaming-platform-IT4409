@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Figtree, Play } from "next/font/google";
 
 import "./globals.css";
-import Sidebar from "@/components/Sidebar";
+import Sidebar from "@/components/sidebar/Sidebar";
 import ModalProvider from "@/providers/ModalProvider";
 import fakeGetSongById from "@/actions/api/getSongByUserId";
 import { NextAuthProvider } from "@/providers/AuthProvider";
