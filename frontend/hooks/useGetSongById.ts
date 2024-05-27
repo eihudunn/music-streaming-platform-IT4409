@@ -1,4 +1,4 @@
-import { fakeGetSongBySongId } from "@/actions/api/getSongByUserId";
+import getSongBySongId from "@/actions/getSongBySongId";
 import { Song } from "@/scheme/Song";
 import { useEffect, useMemo, useState } from "react";
 
@@ -10,9 +10,12 @@ const useGetSongById = (id: string) => {
   useEffect(() => {
     setIsLoading(true);
     //fetch song by id
-    const data = fakeGetSongBySongId();
-    setSong(data as Song);
-    setIsLoading(false);
+    const getSongById = async () => {
+      const data = await getSongBySongId(id);
+      setSong(data as Song);
+      setIsLoading(false);
+    };
+    getSongById();
   }, [id]);
 
   return useMemo(

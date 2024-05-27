@@ -72,7 +72,9 @@ const Header: React.FC<HeaderProps> = ({ children, className }) => {
                 <Image
                   alt="avt"
                   className="rounded-full"
-                  src={session?.user?.image as string}
+                  src={
+                    (session?.user?.picture as string) || "/images/default.png"
+                  }
                   width={60}
                   height={60}
                 />

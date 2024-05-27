@@ -1,15 +1,13 @@
 import Header from "@/components/Header";
 import ListItem from "@/components/ListItem";
 import PageContent from "./components/PageContent";
-import fakeGetSong from "@/actions/api/getSong";
-import { connectDB } from "../_utils/database";
+import getSongs from "@/actions/getSongs";
 
 export const revalidate = 1;
 
 export default async function Home() {
-  const db = connectDB();
-  // const songs = await getSongs();
-  const songs = fakeGetSong();
+  const songs = await getSongs();
+
   return (
     <div className="bg-neutral-900 rounded-lg h-full w-full overflow-hidden overflow-y-auto">
       <Header>

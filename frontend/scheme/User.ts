@@ -4,7 +4,10 @@ const UserSchema = new Schema(
   {
     username: {
       type: String,
+<<<<<<< HEAD
       unique: true,
+=======
+>>>>>>> cc2eb08fd317cd0307362688a428ddd7bdc0cccd
       required: true,
     },
     searchTitle: {
@@ -12,7 +15,10 @@ const UserSchema = new Schema(
     },
     email: {
       type: String,
+<<<<<<< HEAD
       unique: true,
+=======
+>>>>>>> cc2eb08fd317cd0307362688a428ddd7bdc0cccd
     },
     password: {
       type: String,
@@ -57,5 +63,20 @@ const UserSchema = new Schema(
   { timestamps: true }
 );
 
-const User = models.User || mongoose.model("User", UserSchema);
+const User = models?.User || mongoose.model("User", UserSchema);
 export default User;
+
+export interface UserDto {
+  username: string;
+  searchTitle?: string;
+  email?: string;
+  password?: string;
+  following?: string[];
+  artistFollowed?: string[];
+  playlists?: string[];
+  albumsFollowed?: string[];
+  preferedGenre?: {
+    genre: string;
+    weight: number;
+  }[];
+}

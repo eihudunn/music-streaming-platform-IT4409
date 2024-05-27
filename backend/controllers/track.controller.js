@@ -7,6 +7,14 @@ const fs = require("fs");
 const {
   toLowerCaseNonAccentVietnamese,
 } = require("../helper/vietnameseTextToLowerCase.js");
+require("dotenv").config();
+const cloudinary = require("cloudinary").v2;
+
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
+});
 
 const getTracks = async (req, res) => {
   try {
@@ -14,6 +22,18 @@ const getTracks = async (req, res) => {
     res.json(tracks);
   } catch (error) {
     res.status(500).json({ message: error.message });
+  }
+};
+
+const getTracksById = async (req, res) => {
+  try {
+    const track = await Track.findById(req.params.id);
+    if (track == null) {
+      return res.status(404).json({ message: "Cannot find track" });
+    }
+    res.json(track);
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
   }
 };
 
@@ -44,12 +64,12 @@ const uploadTrack = async (req, res) => {
     let track = new Track({
       title: req.body.title,
       artist: req.body.artist,
-      userId: req.body.userId,
+      userId: req.body.userId || null,
       searchTitle: toLowerCaseNonAccentVietnamese(req.body.title),
       href: uploadHrefResult.secure_url,
       img: uploadImgResult.secure_url,
-      album: req.body.album,
-      genre: req.body.genre,
+      album: req.body.album || null,
+      genre: req.body.genre || null,
       plays: 0,
       likes: 0,
       comments: [],
@@ -298,4 +318,5 @@ module.exports = {
   trackSuggestion,
   playTrack,
   reactionTrack,
+  getTracksById,
 };
