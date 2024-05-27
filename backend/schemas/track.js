@@ -1,5 +1,4 @@
 const mongoose = require('mongoose');
-const { search } = require('../routes/track');
 
 const TrackSchema = mongoose.Schema({
     title: {
@@ -11,11 +10,14 @@ const TrackSchema = mongoose.Schema({
     artist: {
         type: String,
     },
-    artistId: {
+    userId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
     },
     href: {
+        type: String,
+    },
+    img: {
         type: String,
     },
     album: {

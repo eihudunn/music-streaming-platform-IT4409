@@ -6,6 +6,15 @@ const UserSchema = mongoose.Schema({
         unique: true,
         required: true,
     },
+    avatarImg: {
+        type: String,
+        default: 'https://upload.wikimedia.org/wikipedia/commons/a/af/Default_avatar_profile.jpg'
+    },
+    email: {
+        type: String,
+        unique: true,
+        required: true,
+    },
     searchTitle: {
         type: String,
     },
@@ -23,11 +32,21 @@ const UserSchema = mongoose.Schema({
     }],
     playlists: [{
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Track'
+        ref: 'Playlist'
     }],
     albumsFollowed: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Album'
+    }],
+    preferedGenre: [{
+        genre: {
+            type: String,
+            required: true
+        },
+        weight: {
+            type: Number,
+            required: true
+        }
     }]
 }, {timestamps: true});
 

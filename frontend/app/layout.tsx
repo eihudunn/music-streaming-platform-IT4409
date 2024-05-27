@@ -4,6 +4,9 @@ import "./globals.css";
 import Sidebar from "@/components/Sidebar";
 import ModalProvider from "@/providers/ModalProvider";
 import fakeGetSongById from "@/actions/api/getSongByUserId";
+import { NextAuthProvider } from "@/providers/AuthProvider";
+import { Toaster } from "react-hot-toast";
+import Player from "@/components/Player";
 
 const font = Figtree({ subsets: ["latin"] });
 
@@ -24,11 +27,13 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={font.className}>
-        <ModalProvider />
-        <Sidebar songs={userSong}> 
-          {children}
-        </Sidebar>
-        </body>
+        <NextAuthProvider>
+          <ModalProvider />
+          <Toaster />
+          <Sidebar songs={userSong}>{children}</Sidebar>
+          <Player />
+        </NextAuthProvider>
+      </body>
     </html>
   );
 }

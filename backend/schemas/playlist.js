@@ -5,10 +5,13 @@ const PlaylistSchema = mongoose.Schema({
     title: {
         type: String,
     },
+    img: {
+        type: String,
+    },
     searchTitle: {
         type: String,
     },
-    user: {
+    userId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
     },
@@ -24,4 +27,7 @@ const PlaylistSchema = mongoose.Schema({
         ref: 'Comment'
     }],
 }); 
+
 const Playlist = mongoose.model('Playlist', PlaylistSchema);
+
+module.exports = Playlist;
