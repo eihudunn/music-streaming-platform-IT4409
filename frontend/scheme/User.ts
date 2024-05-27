@@ -4,7 +4,6 @@ const UserSchema = new Schema(
   {
     username: {
       type: String,
-      unique: true,
       required: true,
     },
     searchTitle: {
@@ -12,7 +11,6 @@ const UserSchema = new Schema(
     },
     email: {
       type: String,
-      unique: true,
     },
     password: {
       type: String,
@@ -57,7 +55,7 @@ const UserSchema = new Schema(
   { timestamps: true }
 );
 
-const User = models.User || mongoose.model("User", UserSchema);
+const User = models?.User || mongoose.model("User", UserSchema);
 export default User;
 
 export interface UserDto {

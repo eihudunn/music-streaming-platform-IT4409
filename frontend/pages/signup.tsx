@@ -72,7 +72,7 @@ const SignupComponent = () => {
           onChange={(e) => setConfirmEmail(e.target.value)}
         />
         {isEmailNotMatch && (
-          <div className="text-red-500">Emails do not match</div>
+          <div className="text-red-500 justify-start">Emails do not match</div>
         )}
         <TextInput
           label="Username"

@@ -8,6 +8,7 @@ import fakeGetSongById from "@/actions/api/getSongByUserId";
 import { NextAuthProvider } from "@/providers/AuthProvider";
 import { Toaster } from "react-hot-toast";
 import Player from "@/components/musicBar/Player";
+import UserProvider from "@/providers/UserProvider";
 
 const font = Figtree({ subsets: ["latin"] });
 

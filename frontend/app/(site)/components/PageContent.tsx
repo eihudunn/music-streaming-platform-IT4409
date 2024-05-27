@@ -3,6 +3,7 @@
 import SongItem from "@/components/SongItem";
 import useOnPlay from "@/hooks/useOnPlay";
 import { Song } from "@/scheme/Song";
+import { useSession } from "next-auth/react";
 
 interface PageContentProps {
   songs: Song[];
@@ -10,6 +11,8 @@ interface PageContentProps {
 
 const PageContent: React.FC<PageContentProps> = ({ songs }) => {
   const onPlay = useOnPlay(songs);
+  const { data: session } = useSession();
+  console.log(session);
 
   if (songs?.length === 0) {
     return <div className="mt-4 text-neutral-400">No songs available.</div>;
