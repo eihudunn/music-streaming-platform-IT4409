@@ -4,9 +4,9 @@ import { usePathname } from "next/navigation";
 import { useMemo } from "react";
 import { BiSearch } from "react-icons/bi";
 import { HiHome } from "react-icons/hi";
-import Box from "./Box";
+import Box from "../Box";
 import SidebarItem from "./SidebarItem";
-import Library from "./Library";
+import Library from "../Library";
 import { Song } from "@/scheme/Song";
 import usePlayer from "@/hooks/usePlayer";
 import { twMerge } from "tailwind-merge";
@@ -17,7 +17,6 @@ interface SidebarProp {
 }
 
 const Sidebar: React.FC<SidebarProp> = ({ children, songs }) => {
-
   const pathname = usePathname();
   const player = usePlayer();
 
