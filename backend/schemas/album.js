@@ -37,6 +37,10 @@ const AlbumSchema = mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Comment'
     }],
+    sendNotify: {
+        type: Boolean,
+        default: true,
+    }
 }, {timestamps: true});
 
 const Album = mongoose.model('Album', AlbumSchema);

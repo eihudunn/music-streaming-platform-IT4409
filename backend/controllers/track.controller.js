@@ -5,7 +5,9 @@ const User = require('../schemas/user.js');
 const path = require('path');
 const fs = require('fs');
 const { toLowerCaseNonAccentVietnamese } = require('../helper/vietnameseTextToLowerCase.js');
+const Notification = require('../schemas/notification.js');
 const cloudinary = require('cloudinary').v2;
+require("dotenv").config();
 
 cloudinary.config({
     cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
@@ -212,9 +214,10 @@ const trackSuggestion = async (req, res) => {
 
 const playTrack = async (req, res) => {
     try {
-        const { trackId, userId } = req.body;
+        const { trackId, userId, play } = req.body;
         const track = await Track.findById(trackId);
-        track.plays++;
+        if (play) track.plays += play;
+        else track.plays++;
         await track.save();
         const user = await User.findById(userId);
         let genreExists = false;
@@ -232,9 +235,88 @@ const playTrack = async (req, res) => {
             });
         }
         await user.save();
+        if (track.plays === 10000 || track.plays === 100000 || track.plays === 1000000) {
+            let notify = new Notification({
+                userId: track.userId.toString(),
+                content: `Congratulation, your track: ${track.title} have been listened for ${track.plays} times!`,
+                type: 'Congratulation'
+            })
+            notify.save()
+        }
         res.json({ message: 'Track played successfully!', track, user });
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
 }
-module.exports = { getTracks, uploadTrack, deleteTrack, updateTrack, trackSuggestion, playTrack };
+
+const likeTracks = async (req, res) => {
+    try {
+        let user = await User.findById(req.body.userId);
+        let track = await Track.findById(req.body.trackId);
+        let like = req.body.like;
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+        if (!track) {
+            return res.status(404).json({ message: 'Track not found' });
+        }
+        if (!user.likedTracks.includes(track._id.toString())) {
+            let genreExists = false;
+            user.preferedGenre = user.preferedGenre.map(g => {
+                if (g.genre === track.genre) {
+                    g.weight+=10;
+                }
+                return g;
+            });
+            if (!genreExists) {
+                user.preferedGenre.push({
+                    genre: track.genre,
+                    weight: 10
+                });
+            }
+            user.likedTracks.push(track._id);
+            if (like) track.likes+= like;
+            else track.likes++;
+            user.save();
+            track.save();
+        }
+        if (track.likes === 10000 || track.likes === 100000 || track.likes === 1000000) {
+            let notify = new Notification({
+                userId: track.userId.toString(),
+                content: `Congratulation, your track: ${track.title} have reached ${track.likes} likes!`,
+                type: 'Congratulation'
+            })
+            notify.save()
+        }
+        res.json({ message: 'Track liked successfully', user, track });
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+}
+
+const unlikeTracks = async (req, res) => {
+    try {
+        let user = await User.findById(req.body.userId);
+        let track = await Track.findById(req.body.trackId);
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+        if (!track) {
+            return res.status(404).json({ message: 'Track not found' });
+        }
+        user.likedTracks = user.likedTracks.filter(trackId => trackId.toString() !== track._id.toString());
+        user.preferedGenre = user.preferedGenre.map(g => {
+            if (g.genre === track.genre) {
+                g.weight-=10;
+            }
+            return g;
+        });
+        track.likes--;
+        user.save();
+        track.save();
+        res.json({ message: 'Track unliked successfully', user, track });
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+}
+module.exports = { getTracks, uploadTrack, deleteTrack, updateTrack, trackSuggestion, playTrack, likeTracks, unlikeTracks };

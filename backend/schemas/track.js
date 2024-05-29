@@ -10,7 +10,7 @@ const TrackSchema = mongoose.Schema({
     artist: {
         type: String,
     },
-    artistId: {
+    userId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
     },

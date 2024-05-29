@@ -1,16 +1,18 @@
 const User = require('../schemas/user.js');
 const Playlist = require('../schemas/playlist.js');
+const Notification = require('../schemas/notification.js');
 const path = require('path');
 const fs = require('fs');
 const { model } = require('mongoose');
 const { toLowerCaseNonAccentVietnamese } = require('../helper/vietnameseTextToLowerCase.js');
 const Album = require('../schemas/album.js');
 const cloudinary = require('cloudinary').v2;
+require("dotenv").config();
 
 cloudinary.config({
-    cloud_name: 'degxdypyr',
-    api_key: '376626565986285',
-    api_secret: 'BIkyhrU0bwAVPMb0jONzz0mHx_8',
+    cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+    api_key: process.env.CLOUDINARY_API_KEY,
+    api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 
 const getUsers = async (req, res) => {
@@ -141,6 +143,14 @@ const followArtist = async (req, res) => {
             artist.following.push(user._id);
         }
         artist.save();
+        if (artist.following.length == 1000 || artist.following.length == 10000 || artist.following.length == 100000 ) {
+            let notify = new Notification({
+                userId: artist._id,
+                content: `You have reached ${artist.following.length} of followers!`,
+                type: 'Congratulation',
+            });
+            notify.save();  
+        }
         user.save(function (err) {
             if (err) {
                 res.status(500).json({ message: err.message });
@@ -215,4 +225,27 @@ const unfollowAlbum = async (req, res) => {
     }
 }
 
-module.exports = { getUsers, postUser, updateUser, deleteUser, followArtist, unfollowArtist, followAlbum, unfollowAlbum};
+const getNotify = async (req, res) => {
+    try {
+        const id = await User.findById(req.params.id);
+        const notify = await Notification.find({ userId: id });
+        if (!notify) {
+            return res.status(200).json({ message: 'There are no notification' });
+        }   
+        res.status(200).json(notify);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+}
+
+//debug
+const getAllNotify = async (req, res) => {
+    try {
+        const notify = await Notification.find(); 
+        res.status(200).json(notify);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+
+}
+module.exports = { getUsers, postUser, updateUser, deleteUser, followArtist, unfollowArtist, followAlbum, unfollowAlbum, getNotify, getAllNotify };

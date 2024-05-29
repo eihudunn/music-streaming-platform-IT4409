@@ -1,16 +1,19 @@
 const Track = require('../schemas/track.js');
 const Album = require('../schemas/album.js');
 const User = require('../schemas/user.js');
+const Notification = require('../schemas/notification.js');
 const path = require('path');
 const fs = require('fs');
 const { model } = require('mongoose');
 const { toLowerCaseNonAccentVietnamese } = require('../helper/vietnameseTextToLowerCase.js');
+const { send } = require('process');
 const cloudinary = require('cloudinary').v2;
+require("dotenv").config();
 
 cloudinary.config({
-    cloud_name: 'degxdypyr',
-    api_key: '376626565986285',
-    api_secret: 'BIkyhrU0bwAVPMb0jONzz0mHx_8',
+    cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+    api_key: process.env.CLOUDINARY_API_KEY,
+    api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 
 const getAlbums = async (req, res) => {
@@ -36,18 +39,31 @@ const uploadAlbum = async (req, res) => {
             title: req.body.title,
             searchTitle: toLowerCaseNonAccentVietnamese(req.body.title),
             img: uploadImgResult.secure_url,
+            img: imgLink,
             artist: req.body.artist,
-            artistId: req.body.uploadId,
+            artistId: req.body.artistId,
             genre: req.body.genre,
             year: req.body.year,
             tracks: req.body.tracks,
+            sendNotify: req.body.sendNotify,
         });
-        album.save(function (err) {
-            if (err) {
-                res.status(500).json({ message: err.message });
-            } else {
+        album.save(async function (err) {
+            try {
+                const artist = await User.findById(req.body.artistId);
+                if (album.sendNotify) {
+                    artist.following.forEach(followerId => {
+                        let notify = new Notification({
+                            userId: followerId.toString(),
+                            content: 'New album ' + album.title + ' by ' + album.artist + ' has been uploaded!',
+                            type: 'New',
+                        })
+                        notify.save();
+                    });
+                }
                 res.status(200).json({ message: 'Album uploaded successfully!', album });
-            }
+            } catch (err) {
+                res.status(500).json({ message: err.message });
+            } 
         });
     }
     catch (error) {
@@ -66,8 +82,24 @@ const deleteAlbum = async (req, res) => {
         if (deleteResult.result !== 'ok' && deleteResult.result !== 'not found') {
             return res.status(500).json({ message: 'Failed to delete album image from cloudinary', deleteResult });
         }
-        album.remove();
-        res.json({ message: 'Album deleted successfully!', album });
+        album.remove(async function (err) {
+            try {
+                const artist = await User.findById(album.artistId);
+                if (album.sendNotify ) {
+                    artist.following.forEach(followerId => {
+                        let notify = new Notification({
+                            userId: followerId.toString(),
+                            content: 'Album ' + album.title + ' by ' + album.artist + ' has been deleted!',
+                            type: 'Warning',
+                        })
+                        notify.save();
+                    });
+                }
+                res.json({ message: 'Album deleted successfully!', album });
+            } catch (error) {
+                res.status(500).json({ message: error.message });
+            }
+        });
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
@@ -79,12 +111,13 @@ const updateAlbum = async (req, res) => {
         if (!album) {
             return res.status(404).json({ message: 'Album not found' });
         }
-        const { title, artist, genre, year, tracks, img } = req.body;
+        const { title, artist, genre, year, tracks, sendNotify} = req.body;
         if (title) album.title = title;
         if (artist) album.artist = artist;
         if (genre) album.genre = genre;
         if (year) album.year = year;
         if (tracks) album.tracks = tracks;
+        if (sendNotify) album.sendNotify = sendNotify;
         if (req.file) {
             const publicId = album.img.split('/').pop().split('.')[0];
             const deletionResult = await cloudinary.uploader.destroy(publicId, { resource_type: 'image' });
@@ -101,7 +134,25 @@ const updateAlbum = async (req, res) => {
             });
             album.img = uploadImgResult.secure_url;
         }
-        album.save();
+        album.save(
+            async function (err) {
+                try {
+                    const artist = await User.findById(album.artistId);
+                    if (album.sendNotify) {
+                        artist.following.forEach(followerId => {
+                            let notify = new Notification({
+                                userId: followerId.toString(),
+                                content: 'Album ' + album.title + ' by ' + album.artist + ' has been updated!',
+                                type: 'Updated',
+                            })
+                            notify.save();
+                        });
+                    }
+                } catch (err) {
+                    res.status(500).json({ message: err.message });
+                }
+            }
+        );
         res.json({ message: 'Album updated successfully!', album: album });
     } catch (error) {
         res.status(500).json({ message: error.message });
