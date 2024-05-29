@@ -26,7 +26,7 @@ const PlaylistSchema = mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Comment'
     }],
-}); 
+},  {timestamps: true}); 
 
 const Playlist = mongoose.model('Playlist', PlaylistSchema);
 

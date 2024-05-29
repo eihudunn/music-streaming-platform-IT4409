@@ -17,7 +17,7 @@ const AlbumSchema = mongoose.Schema({
         type: String,
         required: true,
     },
-    uploadId: {
+    artistId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
     },
@@ -31,12 +31,16 @@ const AlbumSchema = mongoose.Schema({
     }],
     likes: {
         type: Number,
-        required: true,
+        default: 0
     },
     comments: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Comment'
     }],
+    sendNotify: {
+        type: Boolean,
+        default: true,
+    }
 }, {timestamps: true});
 
 const Album = mongoose.model('Album', AlbumSchema);

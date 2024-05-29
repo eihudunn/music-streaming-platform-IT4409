@@ -28,14 +28,16 @@ const TrackSchema = mongoose.Schema({
     },
     plays: {
         type: Number,
+        default: 0
     },
     likes: {
         type: Number,
+        default: 0
     },
     comments: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Comment'
     }],
-});
+}, {timestamps: true});
 const Track = mongoose.model('Track', TrackSchema);
 module.exports = Track;
