@@ -1,13 +1,13 @@
-"use client";
+'use client';
 
-import { useRouter } from "next/navigation";
-import { BiHome, BiSearch } from "react-icons/bi";
-import { HiHome } from "react-icons/hi";
-import { RxCaretLeft, RxCaretRight } from "react-icons/rx";
-import { twMerge } from "tailwind-merge";
-import { signOut, useSession } from "next-auth/react";
-import Button from "./Button";
-import Image from "next/image";
+import { useRouter } from 'next/navigation';
+import { BiHome, BiSearch } from 'react-icons/bi';
+import { HiHome } from 'react-icons/hi';
+import { RxCaretLeft, RxCaretRight } from 'react-icons/rx';
+import { twMerge } from 'tailwind-merge';
+import { signOut, useSession } from 'next-auth/react';
+import Button from './Button';
+import Image from 'next/image';
 
 interface HeaderProps {
   children: React.ReactNode;
@@ -19,19 +19,19 @@ const Header: React.FC<HeaderProps> = ({ children, className }) => {
   const { status, data: session } = useSession();
 
   const handleLogin = () => {
-    router.push("/login");
+    router.push('/login');
   };
 
   const handleSignup = () => {
-    router.push("/signup");
+    router.push('/signup');
   };
 
   const handleLogout = () => {};
   return (
     <div
       className={twMerge(
-        "h-fit bg-gradient-to-b from-emerald-800 p-6",
-        className
+        'h-fit bg-gradient-to-b from-emerald-800 p-6',
+        className,
       )}
     >
       <div className="w-full mb-4 flex items-center justify-between">
@@ -58,7 +58,7 @@ const Header: React.FC<HeaderProps> = ({ children, className }) => {
           </button>
         </div>
         <div className="flex justify-between items-center gap-x-4">
-          {status === "authenticated" ? (
+          {status === 'authenticated' ? (
             <>
               <div>
                 <Button
@@ -73,7 +73,7 @@ const Header: React.FC<HeaderProps> = ({ children, className }) => {
                   alt="avt"
                   className="rounded-full"
                   src={
-                    (session?.user?.picture as string) || "/images/default.png"
+                    (session?.user?.picture as string) || '/images/default.png'
                   }
                   width={60}
                   height={60}

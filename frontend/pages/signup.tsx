@@ -1,20 +1,20 @@
-"use client";
+'use client';
 
-import { Icon } from "@iconify/react";
-import TextInput from "@/components/auth/TextInput";
-import PasswordInput from "@/components/auth/PasswordInput";
-import Link from "next/link";
-import { use, useEffect, useRef, useState } from "react";
-import axios from "axios";
-import toast from "react-hot-toast";
+import { Icon } from '@iconify/react';
+import TextInput from '@/components/auth/TextInput';
+import PasswordInput from '@/components/auth/PasswordInput';
+import Link from 'next/link';
+import { use, useEffect, useRef, useState } from 'react';
+import axios from 'axios';
+import toast from 'react-hot-toast';
 
 const SignupComponent = () => {
   const [data, setData] = useState({
-    username: "",
-    email: "",
-    password: "",
+    username: '',
+    email: '',
+    password: '',
   });
-  const [confirmEmail, setConfirmEmail] = useState("");
+  const [confirmEmail, setConfirmEmail] = useState('');
   const [isEmailNotMatch, setIsEmailNotMatch] = useState(false);
 
   const handleSignUp = async () => {
@@ -22,19 +22,19 @@ const SignupComponent = () => {
       console.log(data);
       try {
         const register = await axios.post(
-          "http://localhost:3000/api/register",
+          'http://localhost:3000/api/register',
           data,
           {
             headers: {
-              "Content-Type": "application/json",
+              'Content-Type': 'application/json',
             },
-          }
+          },
         );
-        toast.success("Account Created Successfully");
+        toast.success('Account Created Successfully');
         console.log(register);
       } catch (error) {
         console.error(error);
-        toast.error("Account Creation Failed");
+        toast.error('Account Creation Failed');
       }
     }
     //  console.log(data);

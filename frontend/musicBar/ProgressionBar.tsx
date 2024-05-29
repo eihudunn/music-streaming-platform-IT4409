@@ -1,6 +1,8 @@
 'use client';
+
 //@ts-ignore
 import useSound from 'use-sound';
+import { useEffect, useState } from 'react';
 import { BsPauseFill, BsPlayFill } from 'react-icons/bs';
 import { AiFillStepBackward, AiFillStepForward } from 'react-icons/ai';
 import { HiSpeakerWave, HiSpeakerXMark } from 'react-icons/hi2';
@@ -10,14 +12,17 @@ import MediaItem from '../MediaItem';
 import LikeButton from './LikeButton';
 import Slider from './Slider';
 import usePlayer from '@/hooks/usePlayer';
-import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { useState } from 'react';
+import toast from 'react-hot-toast';
+import { AiFillHeart, AiOutlineHeart } from 'react-icons/ai';
 
-interface PlayerContentProps {
+interface ProgressionBarProps {
   song: Song;
   songUrl: string;
 }
 
-const PlayerContent: React.FC<PlayerContentProps> = ({ song, songUrl }) => {
+const ProgressionBar: React.FC<ProgressionBarProps> = ({ song, songUrl }) => {
   const player = usePlayer();
   const [volume, setVolume] = useState(1);
   const [isPlaying, setIsPlaying] = useState(false);
@@ -89,17 +94,11 @@ const PlayerContent: React.FC<PlayerContentProps> = ({ song, songUrl }) => {
   };
 
   return (
-    <div className="grid grid-cols-2 md:grid-cols-3 h-full">
-      <div className="flex w-full justify-start">
-        <div className="flex items-center gap-x-4">
-          <MediaItem data={song} />
-          <LikeButton songId={song.id} />
-        </div>
-      </div>
+    <div className="flex w-full items-center justify-center">
       <div className="flex md:hidden col-auto w-full justify-end items-center">
         <div
           onClick={handlePlay}
-          className="h-10 w-10 flex items-center justify-center rounded-full bg-white p-1 cursor-pointer"
+          className="h-12 w-12 flex items-center justify-center rounded-full bg-white p-1 cursor-pointer"
         >
           <Icon size={30} className="text-black" />
         </div>
@@ -116,24 +115,15 @@ const PlayerContent: React.FC<PlayerContentProps> = ({ song, songUrl }) => {
         >
           <Icon size={30} className="text-black" />
         </div>
+
         <AiFillStepForward
           onClick={onPlayNext}
           size={30}
           className="text-neutral-400 cursor-pointer hover:text-white transition"
         />
       </div>
-      <div className="hidden md:flex w-full justify-end pr-2">
-        <div className="flex items-center gap-x-2 w-[120px]">
-          <VolumeIcon
-            onClick={toggleMute}
-            size={34}
-            className="cursor-pointer"
-          />
-          <Slider value={volume} onChange={(value) => setVolume(value)} />
-        </div>
-      </div>
     </div>
   );
 };
 
-export default PlayerContent;
+export default ProgressionBar;
