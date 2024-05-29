@@ -10,4 +10,5 @@ export interface Song {
   plays?: number;
   likes?: number;
   comments?: [];
+  type?: string;
 }

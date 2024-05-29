@@ -26,7 +26,6 @@ const Header: React.FC<HeaderProps> = ({ children, className }) => {
     router.push("/signup");
   };
 
-  const handleLogout = () => {};
   return (
     <div
       className={twMerge(

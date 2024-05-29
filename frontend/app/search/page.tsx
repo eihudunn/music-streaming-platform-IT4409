@@ -1,4 +1,4 @@
-import fakeGetSong from "@/app/api/getSong";
+import fakeGetSong from "@/actions/api/getSong";
 import Header from "@/components/Header";
 import SearchInput from "@/components/SearchInput";
 import { SearchParamsContext } from "next/dist/shared/lib/hooks-client-context.shared-runtime";
