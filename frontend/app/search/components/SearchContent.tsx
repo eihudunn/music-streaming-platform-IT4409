@@ -1,37 +1,43 @@
-"use client";
+'use client';
 
+import LikeButton from '@/components/musicBar/LikeButton';
 import MediaItem from '@/components/MediaItem';
+import useOnPlay from '@/hooks/useOnPlay';
 import { Song } from '@/scheme/Song';
-import React from 'react'
+import React from 'react';
 
 interface SearchContentProps {
-    songs: Song[];
+  songs: Song[];
 }
 
-const SearchContent: React.FC<SearchContentProps> = ({songs}) => {
+const SearchContent: React.FC<SearchContentProps> = ({ songs }) => {
+  const onPlay = useOnPlay(songs);
+
   if (songs.length === 0) {
     return (
-        <>
-            <div className='flex flex-col gap-y-2 w-full px-6 text-neutral-400'>
-                No songs found.
-            </div>
-            <div>
-                Please make sure your words are spelled correctly, or use fewer or different keywords.
-            </div>
-        </>
-    )
+      <>
+        <div className="flex flex-col gap-y-2 w-full px-6 text-neutral-400">
+          No songs found.
+        </div>
+        <div>
+          Please make sure your words are spelled correctly, or use fewer or
+          different keywords.
+        </div>
+      </>
+    );
   }
   return (
-    <div className='flex flex-col gap-y-2 w-full px-6'>
-        {songs.map((song) => (
-            <div key={song.id} className='flex items-center gap-x-4 w-full'>
-                <div className='flex-1'>
-                    <MediaItem onClick={() => {}} data={song} />
-                </div>
-            </div>
-        ))}
+    <div className="flex flex-col gap-y-2 w-full px-6">
+      {songs.map((song) => (
+        <div key={song.id} className="flex items-center gap-x-4 w-full">
+          <div className="flex-1">
+            <MediaItem onClick={(id: string) => onPlay(id)} data={song} />
+          </div>
+          <LikeButton songId={song.id} />
+        </div>
+      ))}
     </div>
-  )
-}
+  );
+};
 
 export default SearchContent;

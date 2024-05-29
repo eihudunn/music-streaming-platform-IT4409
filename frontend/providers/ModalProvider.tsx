@@ -1,26 +1,25 @@
-"use client";
+'use client';
 
-import UploadModal from "@/components/UploadModal";
+import UploadModal from '@/components/UploadModal';
 // import AuthModal from "@/components/AuthModal";
-import { useEffect, useState } from "react";
+import { useEffect, useState } from 'react';
 
 const ModalProvider = () => {
-    const [isMounted, setIsMounted] = useState(false);
+  const [isMounted, setIsMounted] = useState(false);
 
-    useEffect(() => {
-        setIsMounted(true);
-    }, []);
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
 
-    if (!isMounted) {
-        return null;
-    }
+  if (!isMounted) {
+    return null;
+  }
 
-    return (
-        <>
-        <UploadModal />
-        </>
-        
-    );
-}
+  return (
+    <>
+      <UploadModal />
+    </>
+  );
+};
 
 export default ModalProvider;

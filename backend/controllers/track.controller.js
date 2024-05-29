@@ -10,24 +10,36 @@ const cloudinary = require('cloudinary').v2;
 require("dotenv").config();
 
 cloudinary.config({
-    cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
-    api_key: process.env.CLOUDINARY_API_KEY,
-    api_secret: process.env.CLOUDINARY_API_SECRET,
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 
 const getTracks = async (req, res) => {
-    try {
-        const tracks = await Track.find();
-        res.json(tracks);
-    } catch (error) {
-        res.status(500).json({ message: error.message });
+  try {
+    const tracks = await Track.find();
+    res.json(tracks);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+const getTracksById = async (req, res) => {
+  try {
+    const track = await Track.findById(req.params.id);
+    if (track == null) {
+      return res.status(404).json({ message: "Cannot find track" });
     }
+    res.json(track);
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
 };
 
 const uploadTrack = async (req, res) => {
-    try {
-        let hrefLink = './services/temp/' + req.files.song[0].filename;
-        let imgLink = './services/temp/' + req.files.img[0].filename;
+  try {
+    let hrefLink = "./services/temp/" + req.files.song[0].filename;
+    let imgLink = "./services/temp/" + req.files.img[0].filename;
 
         const uploadHrefResult = await cloudinary.uploader.upload(hrefLink, { resource_type: 'raw' });
         fs.unlink(hrefLink, err => {
@@ -60,19 +72,19 @@ const uploadTrack = async (req, res) => {
             comments: []
         });
 
-        track.save(function (err) {
-            if (err) {
-                res.status(500).json({ message: err.message });
-            } else {
-                res.status(200).json({ message: 'Track uploaded successfully!', track: track });
-            }
-        });
-    }
-    catch (error) {
-        res.status(500).json({ message: error.message });
-    }
+    track.save(function (err) {
+      if (err) {
+        res.status(500).json({ message: err.message });
+      } else {
+        res
+          .status(200)
+          .json({ message: "Track uploaded successfully!", track: track });
+      }
+    });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
 };
-
 
 const updateTrack = async (req, res) => {
     try {
@@ -123,15 +135,13 @@ const updateTrack = async (req, res) => {
                 }
             });
             track.img = uploadImgResult.secure_url;
-        }
-        await track.save();
-        res.json({ message: 'Track updated successfully!', track });
-    } catch (error) {
-        res.status(500).json({ message: error.message });
     }
+    await track.save();
+    res.json({ message: "Track updated successfully!", track });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
 };
-
-
 
 const deleteTrack = async (req, res) => {
     try {
@@ -157,7 +167,7 @@ const deleteTrack = async (req, res) => {
     } catch (error) {
         console.error('Error deleting track:', error.message);
         res.status(500).json({ message: 'Internal server error',  });
-    }
+  }
 };
 
 const trackSuggestion = async (req, res) => {
@@ -209,8 +219,8 @@ const trackSuggestion = async (req, res) => {
         }
     } catch (error) {
         res.status(500).json({ message: error.message });
-    }
-}
+  }
+};
 
 const playTrack = async (req, res) => {
     try {
@@ -319,4 +329,4 @@ const unlikeTracks = async (req, res) => {
         res.status(500).json({ message: error.message });
     }
 }
-module.exports = { getTracks, uploadTrack, deleteTrack, updateTrack, trackSuggestion, playTrack, likeTracks, unlikeTracks };
+module.exports = { getTracks, getTracksById, uploadTrack, deleteTrack, updateTrack, trackSuggestion, playTrack, likeTracks, unlikeTracks };

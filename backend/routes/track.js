@@ -1,26 +1,45 @@
 const express = require("express");
-const { getTracks, uploadTrack, deleteTrack, updateTrack, trackSuggestion, playTrack, likeTracks, unlikeTracks } = require("../controllers/track.controller");
+
+const {
+  getTracks,
+  uploadTrack,
+  deleteTrack,
+  updateTrack,
+  trackSuggestion,
+  getTracksById,
+  playTrack,
+  likeTracks, 
+  unlikeTracks
+} = require("../controllers/track.controller");
+
 const router = express.Router();
-const multer = require('multer');
-const path = require('path');
+const multer = require("multer");
+const path = require("path");
 
 const storage = multer.diskStorage({
-    destination: function (req, file, cb) {
-      cb(null, path.join(path.dirname(__dirname), 'services/temp'))
-    },
-    filename: function (req, file, cb) {
-      cb(null, Date.now() + '-'+ file.originalname.split(' ').join('_'))
-    }
-})  
+  destination: function (req, file, cb) {
+    cb(null, path.join(path.dirname(__dirname), "services/temp"));
+  },
+  filename: function (req, file, cb) {
+    cb(null, Date.now() + "-" + file.originalname.split(" ").join("_"));
+  },
+});
 const upload = multer({ storage });
 
 router.get("/get", getTracks);
-router.post("/post", upload.fields([{ name: 'song'}, {name: 'img' }]) ,uploadTrack);
+router.get("/get/:id", getTracksById);
+router.post(
+  "/post",
+  upload.fields([{ name: "song" }, { name: "img" }]),
+  uploadTrack
+);
 router.delete("/delete/:id", deleteTrack);
+
 router.post("/update/:id", upload.fields([{ name: 'song'}, {name: 'img' }])  , updateTrack);
+
 router.get("/suggestion/&userid=:id", trackSuggestion);
 router.post("/play", playTrack);
 router.post("/like", likeTracks);
 router.post("/unlike", unlikeTracks);
 
-module.exports = router; 
+module.exports = router;
