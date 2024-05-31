@@ -7,6 +7,7 @@ import useOnPlay from "@/hooks/useOnPlay";
 import { useEffect, useState } from "react";
 import { Playlist } from "@/scheme/Playlist";
 import { LibraryType } from "@/const/libraryType";
+import { useRouter } from "next/navigation";
 
 interface LibraryProps {
   data: (Song | Playlist)[];
@@ -16,8 +17,9 @@ const Library: React.FC<LibraryProps> = ({ data }) => {
   const uploadModal = useUploadModal();
   const [selectedButton, setSelectedButton] = useState<string | null>(null);
   const [selectedData, setSelectedData] = useState<(Song | Playlist)[]>([]);
+  const router = useRouter();
 
-  const songs: Song[] = data.filter((item) => item.type === LibraryType.Song);
+  //const songs: Song[] = data.filter((item) => item.type === LibraryType.Song);
 
   useEffect(() => {
     if (selectedButton) {
@@ -47,7 +49,12 @@ const Library: React.FC<LibraryProps> = ({ data }) => {
     return uploadModal.onOpen();
   };
 
-  const onPlay = useOnPlay(songs);
+  const onDetailClick = (data: any) => {
+    console.log(data);
+    router.push(`/${data.type.toLowerCase()}/${data.id}`);
+  };
+
+  // const onPlay = useOnPlay(songs);
 
   return (
     <div className="flex flex-col">
@@ -124,7 +131,7 @@ const Library: React.FC<LibraryProps> = ({ data }) => {
       <div className="flex flex-col gap-y-2 mt-4 px-3">
         {selectedData.map((datum) => (
           <MediaItem
-            onClick={(id: string) => onPlay(id)}
+            onClick={() => onDetailClick(datum)}
             key={datum.id}
             data={datum}
           />

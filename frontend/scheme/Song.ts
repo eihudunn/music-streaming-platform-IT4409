@@ -11,4 +11,6 @@ export interface Song {
   likes?: number;
   comments?: [];
   type?: string;
+  createdAt?: Date;
+  updatedAt?: Date;
 }

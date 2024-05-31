@@ -3,6 +3,7 @@ const {
   getAllPlaylists,
   createPlaylist,
   getPlaylistByUserId,
+  getPlaylistById,
 } = require("../controllers/playlist.controller");
 const express = require("express");
 
@@ -24,6 +25,7 @@ const upload = multer({ storage });
 router.put("/:playlistId/reaction", reactionPlaylist);
 router.post("/", upload.fields([{ name: "img" }]), createPlaylist);
 router.get("/", getAllPlaylists);
+router.get("/:id", getPlaylistById);
 router.get("/user/:userId", getPlaylistByUserId);
 
 module.exports = router;

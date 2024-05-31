@@ -6,22 +6,22 @@ import { Song } from "@/scheme/Song";
 import Image from "next/image";
 
 interface MediaItemProps {
-  onClick?: (id: string) => void;
+  onClick?: any;
   data: Song | Playlist;
 }
 
 const MediaItem: React.FC<MediaItemProps> = ({ data, onClick }) => {
   const imageUrl = data.img;
 
-  const handleClick = () => {
-    if (onClick && data.type === LibraryType.Song) {
-      return onClick(data.id);
-    }
-    //turn on player
-  };
+  // const handleClick = () => {
+  //   if (onClick && data.type === LibraryType.Song) {
+  //     return onClick(data.id);
+  //   }
+  //   //turn on player
+  // };
   return (
     <div
-      onClick={handleClick}
+      onClick={onClick}
       className="flex items-center gap-x-3 cursor-pointer hover:bg-neutral-800/50 w-full p-2 rounded-md"
     >
       <div className="relative rounded-md min-h-[48px] min-w-[48px] overflow-hidden">

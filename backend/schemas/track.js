@@ -1,41 +1,46 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
-const TrackSchema = mongoose.Schema({
+const TrackSchema = mongoose.Schema(
+  {
     title: {
-        type: String,
+      type: String,
     },
     searchTitle: {
-        type: String,
+      type: String,
     },
     artist: {
-        type: String,
+      type: String,
     },
     userId: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'User',
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
     },
     href: {
-        type: String,
+      type: String,
     },
     img: {
-        type: String,
+      type: String,
     },
     album: {
-        type: String,
+      type: String,
     },
     genre: {
-        type: String,
+      type: String,
     },
     plays: {
-        type: Number,
+      type: Number,
     },
     likes: {
-        type: Number,
+      type: Number,
     },
-    comments: [{
+    comments: [
+      {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Comment'
-    }],
-});
-const Track = mongoose.model('Track', TrackSchema);
+        ref: "Comment",
+      },
+    ],
+  },
+  { timestamps: true }
+);
+const Track = mongoose.model("Track", TrackSchema);
 module.exports = Track;

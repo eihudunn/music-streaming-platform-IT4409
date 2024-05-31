@@ -1,3 +1,5 @@
+import { Song } from "./Song";
+
 const mongoose = require("mongoose");
 const { search } = require("../routes/track");
 
@@ -7,8 +9,10 @@ export interface Playlist {
   img: string;
   searchTitle: string;
   userId: string;
-  tracks: string[];
+  tracks: Song[];
   likes: number;
   comments: string[];
   type?: string;
+  createdAt?: Date;
+  updatedAt?: Date;
 }

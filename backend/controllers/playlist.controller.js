@@ -6,6 +6,7 @@ const cloudinary = require("cloudinary").v2;
 const {
   toLowerCaseNonAccentVietnamese,
 } = require("../helper/vietnameseTextToLowerCase.js");
+const mongoose = require("mongoose");
 
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
@@ -29,12 +30,23 @@ const getAllPlaylists = async (req, res) => {
 const getPlaylistById = async (req, res) => {
   const { id } = req.params;
   try {
-    const playlist = await Playlist.findById(id);
+    const playlist = await Playlist.aggregate([
+      { $match: { _id: mongoose.Types.ObjectId(id) } },
+      {
+        $lookup: {
+          from: "tracks",
+          localField: "tracks",
+          foreignField: "_id",
+          as: "tracks",
+        },
+      },
+    ]);
     if (!playlist) {
       return res.status(404).json({ message: "Playlist not found" });
     }
     return res.json(playlist);
   } catch (error) {
+    console.error(error);
     return res.status(500).json({ message: "Server error" });
   }
 };
