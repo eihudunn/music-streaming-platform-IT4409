@@ -29,7 +29,7 @@ const PlaylistDetail = () => {
   }, [playlistId]);
 
   return (
-    <div className="flex-grow h-screen">
+    <div className="flex-grow h-screen rounded-lg">
       {data && (
         <Palette
           src={data?.img as string}
@@ -46,7 +46,7 @@ const PlaylistDetail = () => {
                 title={data?.title as string}
                 isContentDetail={true}
                 style={{
-                  backgroundImage: `linear-gradient(to bottom, ${color} var(--tw-gradient-from-position), #2b2f31 var(--tw-gradient-from-position) )`,
+                  backgroundImage: `linear-gradient(to bottom, ${color} var(--tw-gradient-from-position), #191b1d var(--tw-gradient-from-position) )`,
                 }}
               >
                 <div className="mt-5">
