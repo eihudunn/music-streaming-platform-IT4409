@@ -21,6 +21,6 @@
       "@/*": ["./*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "../pages/login.tsx", "../pages/signup.tsx"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "../pages/login.tsx", "../pages/signup.tsx", "components/musicBar/CurrentMusicInformation"],
   "exclude": ["node_modules"]
 }

@@ -151,7 +151,7 @@ const followArtist = async (req, res) => {
             });
             notify.save();  
             if (artist.email) {
-                const mailContent = `You have reached ${artist.following.length } likes!`;
+                const mailContent = `Your have reached ${track.plays} follower!`;
                 const htmlMail =  congratulationForm(artist.username, mailContent);
                 sendMail(artist.email, contentTitle, htmlMail);
             }
