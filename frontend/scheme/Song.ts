@@ -9,5 +9,8 @@ export interface Song {
   genre?: string;
   plays?: number;
   likes?: number;
-  comments?: string[];
+  comments?: [];
+  type?: string;
+  createdAt?: Date;
+  updatedAt?: Date;
 }

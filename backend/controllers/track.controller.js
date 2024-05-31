@@ -36,6 +36,20 @@ const getTracksById = async (req, res) => {
   }
 };
 
+const getTracksByUserId = async (req, res) => {
+  try {
+    const tracks = await Track.find({ userId: req.params.userId });
+    if (!tracks.length) {
+      return res
+        .status(404)
+        .json({ message: "Cannot find tracks for the provided user ID" });
+    }
+    res.json(tracks);
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+};
+
 const uploadTrack = async (req, res) => {
   try {
     let hrefLink = "./services/temp/" + req.files.song[0].filename;

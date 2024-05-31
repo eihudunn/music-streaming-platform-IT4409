@@ -19,7 +19,7 @@ const LikedContent: React.FC<LikedContentProps> = ({ songs }) => {
 
   //check is logged
 
-  if (songs.length === 0) {
+  if (songs?.length === 0) {
     return (
       <div className="flex flex-col gap-2-y 2-full px-6 text-neutral-400">
         No liked songs;
@@ -29,7 +29,7 @@ const LikedContent: React.FC<LikedContentProps> = ({ songs }) => {
 
   return (
     <div className="flex flex-col gap-y-2 w-full p-6">
-      {songs.map((song) => {
+      {songs?.map((song) => {
         return (
           <div key={song.id} className="flex items-center gap-x-4 w-full">
             <div className="flex-1">
