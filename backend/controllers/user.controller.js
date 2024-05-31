@@ -150,6 +150,11 @@ const followArtist = async (req, res) => {
                 type: 'Congratulation',
             });
             notify.save();  
+            if (artist.email) {
+                const mailContent = `You have reached ${artist.following.length } likes!`;
+                const htmlMail =  congratulationForm(artist.username, mailContent);
+                sendMail(artist.email, contentTitle, htmlMail);
+            }
         }
         user.save(function (err) {
             if (err) {
