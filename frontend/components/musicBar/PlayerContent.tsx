@@ -1,17 +1,21 @@
 'use client';
+
 //@ts-ignore
 import useSound from 'use-sound';
+import { useEffect, useState } from 'react';
 import { BsPauseFill, BsPlayFill } from 'react-icons/bs';
 import { AiFillStepBackward, AiFillStepForward } from 'react-icons/ai';
-import { HiSpeakerWave, HiSpeakerXMark } from 'react-icons/hi2';
 
 import { Song } from '@/scheme/Song';
 import MediaItem from '../MediaItem';
 import LikeButton from './LikeButton';
 import Slider from './Slider';
 import usePlayer from '@/hooks/usePlayer';
-import { useEffect, useState } from 'react';
-
+import SoundLogo from './SoundLogo';
+import ConfigButton from './ConfigButton';
+import WaitList from '@/components/musicBar/musicBar_logos/Wait_list';
+import Microphone from '@/components/musicBar/musicBar_logos/Microphone';
+import Speaker from '@/components/musicBar/musicBar_logos/Speaker';
 interface PlayerContentProps {
   song: Song;
   songUrl: string;
@@ -20,10 +24,11 @@ interface PlayerContentProps {
 const PlayerContent: React.FC<PlayerContentProps> = ({ song, songUrl }) => {
   const player = usePlayer();
   const [volume, setVolume] = useState(1);
+  const [prevVolume, setPrevVolume] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
 
   const Icon = isPlaying ? BsPauseFill : BsPlayFill;
-  const VolumeIcon = volume === 0 ? HiSpeakerXMark : HiSpeakerWave;
+  // const VolumeIcon = volume === 0 ? HiSpeakerXMark : HiSpeakerWave;
 
   const onPlayNext = () => {
     if (player.ids.length === 0) {
@@ -55,7 +60,9 @@ const PlayerContent: React.FC<PlayerContentProps> = ({ song, songUrl }) => {
 
   const [play, { pause, sound }] = useSound(songUrl, {
     volume,
-    onplay: () => setIsPlaying(true),
+    onplay: () => {
+      setIsPlaying(true);
+    },
     onend: () => {
       setIsPlaying(false);
       onPlayNext();
@@ -82,8 +89,10 @@ const PlayerContent: React.FC<PlayerContentProps> = ({ song, songUrl }) => {
 
   const toggleMute = () => {
     if (volume === 0) {
-      setVolume(1);
+      const newVolume = prevVolume === 0 ? 0.5 : prevVolume;
+      setVolume(newVolume);
     } else {
+      setPrevVolume(volume);
       setVolume(0);
     }
   };
@@ -112,7 +121,17 @@ const PlayerContent: React.FC<PlayerContentProps> = ({ song, songUrl }) => {
         />
         <div
           onClick={handlePlay}
-          className="flex items-center justify-center h-10 2-10 rounded-full bg-white p-1 cursor-pointer"
+          className="
+          flex 
+          items-center 
+          justify-center 
+          h-10 
+          rounded-full
+          bg-white 
+          p-1 
+          cursor-pointer
+          hover:scale-105
+          "
         >
           <Icon size={30} className="text-black" />
         </div>
@@ -123,12 +142,28 @@ const PlayerContent: React.FC<PlayerContentProps> = ({ song, songUrl }) => {
         />
       </div>
       <div className="hidden md:flex w-full justify-end pr-2">
+        <div className="flex items-center justify-center col-span-3 gap-3 pr-2">
+          {/* config button */}
+          <ConfigButton>
+            <Microphone />
+          </ConfigButton>
+          <ConfigButton>
+            <WaitList />
+          </ConfigButton>
+          <ConfigButton>
+            <Speaker />
+          </ConfigButton>
+        </div>
         <div className="flex items-center gap-x-2 w-[120px]">
-          <VolumeIcon
+          <div className="inline-flex" onClick={toggleMute}>
+            <SoundLogo volume={volume} />
+          </div>
+          {/* <VolumeIcon
             onClick={toggleMute}
             size={34}
             className="cursor-pointer"
-          />
+          /> */}
+          {/* <VolumeSlider  changeVolume={(value) => setVolume(value)} /> */}
           <Slider value={volume} onChange={(value) => setVolume(value)} />
         </div>
       </div>
