@@ -343,4 +343,4 @@ const unlikeTracks = async (req, res) => {
         res.status(500).json({ message: error.message });
     }
 }
-module.exports = { getTracks, getTracksById, uploadTrack, deleteTrack, updateTrack, trackSuggestion, playTrack, likeTracks, unlikeTracks };
+module.exports = { getTracks, getTracksById, getTracksByUserId, uploadTrack, deleteTrack, updateTrack, trackSuggestion, playTrack, likeTracks, unlikeTracks };
