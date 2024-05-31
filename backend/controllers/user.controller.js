@@ -25,26 +25,6 @@ const getUsers = async (req, res) => {
   }
 };
 
-const getCurrentUser = async (req, res) => {
-  // try {
-  //   // Extract the JWT from the Authorization header
-  //   const token = req.headers.authorization.split(" ")[1];
-  //   // Verify and decode the JWT
-  //   const decoded = jwt.verify(token, process.env.JWT_SECRET);
-  //   const email = decoded.email;
-  //   // Find the user with the extracted email
-  //   const user = await User.findOne({ email: email });
-  //   // If the user is not found, return an error
-  //   if (!user) {
-  //     return res.status(404).json({ message: "User not found" });
-  //   }
-  //   // Return the user data
-  //   res.json(user);
-  // } catch (error) {
-  //   res.status(500).json({ message: error.message });
-  // }
-};
-
 const postUser = async (req, res) => {
   try {
     let avatarLink = "./services/temp/" + req.file.filename;
@@ -150,7 +130,9 @@ const deleteUser = async (req, res) => {
                 res.json({ message: 'User deleted successfully', user });
             }
         });
-    } catch (error) {
+      })
+    }
+  } catch (error) {
         res.status(500).json({ message: error.message });
   }
 };
