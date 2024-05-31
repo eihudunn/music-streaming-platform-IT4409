@@ -5,6 +5,8 @@ const User = require('../schemas/user.js');
 const path = require('path');
 const fs = require('fs');
 const { toLowerCaseNonAccentVietnamese } = require('../helper/vietnameseTextToLowerCase.js');
+const { sendMail } = require('../helper/sendEmail.js');
+const { congratulationForm } = require('../helper/formHelper.js');
 const Notification = require('../schemas/notification.js');
 const cloudinary = require('cloudinary').v2;
 require("dotenv").config();
@@ -246,7 +248,7 @@ const playTrack = async (req, res) => {
         const user = await User.findById(userId);
         let genreExists = false;
         user.preferedGenre = user.preferedGenre.map(g => {
-            if (g.genre === track.genre) {
+            if (g.genre.toString() === track.genre.toString()) {
                 g.weight++;
                 genreExists = true;
             }
@@ -260,12 +262,19 @@ const playTrack = async (req, res) => {
         }
         await user.save();
         if (track.plays === 10000 || track.plays === 100000 || track.plays === 1000000) {
+            const artist = await User.findById(track.userId); 
+            let contentTitle = `CCongratulation, your track: ${track.title} have been listened for ${track.plays} times!`;
             let notify = new Notification({
                 userId: track.userId.toString(),
-                content: `Congratulation, your track: ${track.title} have been listened for ${track.plays} times!`,
+                content: contentTitle,
                 type: 'Congratulation'
             })
             notify.save()
+            if (artist.email) {
+                const mailContent = `Your track: ${track.title} have reached ${track.plays} plays times!`;
+                const htmlMail =  congratulationForm(artist.username, mailContent);
+                sendMail(artist.email, contentTitle, htmlMail);
+            }
         }
         res.json({ message: 'Track played successfully!', track, user });
     } catch (error) {
@@ -287,7 +296,7 @@ const likeTracks = async (req, res) => {
         if (!user.likedTracks.includes(track._id.toString())) {
             let genreExists = false;
             user.preferedGenre = user.preferedGenre.map(g => {
-                if (g.genre === track.genre) {
+                if (g.genre.toString() === track.genre.toString()) {
                     g.weight+=10;
                 }
                 return g;
@@ -305,12 +314,19 @@ const likeTracks = async (req, res) => {
             track.save();
         }
         if (track.likes === 10000 || track.likes === 100000 || track.likes === 1000000) {
+            const artist = await User.findById(track.userId); 
+            let contentTitle = `Congratulation, your track: ${track.title} have reached ${track.likes} likes!`;
             let notify = new Notification({
                 userId: track.userId.toString(),
-                content: `Congratulation, your track: ${track.title} have reached ${track.likes} likes!`,
+                content: contentTitle,
                 type: 'Congratulation'
             })
-            notify.save()
+            notify.save();
+            if (artist.email) {
+                const mailContent = `Your track: ${track.title} have reached ${track.likes} likes!`;
+                const htmlMail =  congratulationForm(artist.username, mailContent);
+                sendMail(artist.email, contentTitle, htmlMail);
+            }
         }
         res.json({ message: 'Track liked successfully', user, track });
     } catch (error) {

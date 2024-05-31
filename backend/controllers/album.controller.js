@@ -4,9 +4,9 @@ const User = require('../schemas/user.js');
 const Notification = require('../schemas/notification.js');
 const path = require('path');
 const fs = require('fs');
-const { model } = require('mongoose');
 const { toLowerCaseNonAccentVietnamese } = require('../helper/vietnameseTextToLowerCase.js');
-const { send } = require('process');
+const { newAlbumForm } = require('../helper/formHelper.js');
+const { sendMail } = require('../helper/sendEmail.js');
 const cloudinary = require('cloudinary').v2;
 require("dotenv").config();
 
@@ -51,12 +51,18 @@ const uploadAlbum = async (req, res) => {
             try {
                 const artist = await User.findById(req.body.artistId);
                 if (album.sendNotify) {
-                    artist.following.forEach(followerId => {
+                    artist.following.forEach(async (followerId) => {
+                        const follower = await User.findById(followerId);
                         let notify = new Notification({
                             userId: followerId.toString(),
                             content: 'New album ' + album.title + ' by ' + album.artist + ' has been uploaded!',
                             type: 'New',
                         })
+                        if (follower.email) {
+                            const contentTitle = `Your artist ${artist.username} has uploaded an album! `;
+                            const htmlMail =  newAlbumForm(artist.username, req.body.title, 'https://www.google.com'); //album.href ở bên frontend
+                            sendMail(follower.email, contentTitle, htmlMail);
+                        }
                         notify.save();
                     });
                 }
@@ -139,12 +145,18 @@ const updateAlbum = async (req, res) => {
                 try {
                     const artist = await User.findById(album.artistId);
                     if (album.sendNotify) {
-                        artist.following.forEach(followerId => {
+                        artist.following.forEach(async (followerId) => {
+                            const follower = await User.findById(followerId);
                             let notify = new Notification({
                                 userId: followerId.toString(),
                                 content: 'Album ' + album.title + ' by ' + album.artist + ' has been updated!',
                                 type: 'Updated',
                             })
+                            if (follower.email) {
+                                const contentTitle = `Your artist ${artist.username} has updated an album! `;
+                                const htmlMail =  newAlbumForm(artist.username, album.title, 'google.com'); //album.href ở bên frontend
+                                sendMail(follower.email, contentTitle, htmlMail);
+                            }
                             notify.save();
                         });
                     }
