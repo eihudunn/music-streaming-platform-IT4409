@@ -28,10 +28,12 @@ const TrackSchema = mongoose.Schema(
       type: String,
     },
     plays: {
-      type: Number,
+        type: Number,
+        default: 0
     },
     likes: {
-      type: Number,
+        type: Number,
+        default: 0
     },
     comments: [
       {

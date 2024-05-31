@@ -9,6 +9,8 @@ const {
   getTracksById,
   playTrack,
   getTracksByUserId,
+  likeTracks, 
+  unlikeTracks
 } = require("../controllers/track.controller");
 
 const router = express.Router();
@@ -34,12 +36,12 @@ router.post(
   uploadTrack
 );
 router.delete("/delete/:id", deleteTrack);
-router.put(
-  "/update/:id",
-  upload.fields([{ name: "song" }, { name: "img" }]),
-  updateTrack
-);
+
+router.post("/update/:id", upload.fields([{ name: 'song'}, {name: 'img' }])  , updateTrack);
+
 router.get("/suggestion/&userid=:id", trackSuggestion);
 router.post("/play", playTrack);
+router.post("/like", likeTracks);
+router.post("/unlike", unlikeTracks);
 
 module.exports = router;

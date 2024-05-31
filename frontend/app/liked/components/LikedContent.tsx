@@ -1,11 +1,11 @@
-"use client";
+'use client';
 
-import LikeButton from "@/components/musicBar/LikeButton";
-import MediaItem from "@/components/MediaItem";
-import useOnPlay from "@/hooks/useOnPlay";
-import { Song } from "@/scheme/Song";
-import { useRouter } from "next/navigation";
-import React from "react";
+import LikeButton from '@/components/musicBar/LikeButton';
+import MediaItem from '@/components/MediaItem';
+import useOnPlay from '@/hooks/useOnPlay';
+import { Song } from '@/scheme/Song';
+import { useRouter } from 'next/navigation';
+import React from 'react';
 
 interface LikedContentProps {
   songs: Song[];

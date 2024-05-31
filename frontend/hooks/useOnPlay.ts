@@ -1,6 +1,6 @@
-import { Song } from "@/scheme/Song";
+import { Song } from '@/scheme/Song';
 
-import usePlayer from "./usePlayer";
+import usePlayer from './usePlayer';
 
 const useOnPlay = (songs: Song[]) => {
   const player = usePlayer();

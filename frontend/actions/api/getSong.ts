@@ -1,4 +1,4 @@
-import axiosClient from "@/app/_utils/GlobalApi";
+import axiosClient from '@/app/_utils/GlobalApi';
 
 // const getSong = () => axiosClient.get('/song/get');
 
@@ -92,3 +92,19 @@ const fakeGetSong = () => {
 };
 
 export default fakeGetSong;
+
+export const getDefaultSong = () => {
+  return {
+    id: '1',
+    title: 'Ọe ọe',
+    artist: 'me',
+    searchTitle: '',
+    href: '/mp3/Y2meta.app - Tiếng Hóc Xương Lofi Cực Chill (320 kbps).mp3',
+    img: '/images/s6ygo7te.png',
+    album: '',
+    genre: '',
+    plays: 1,
+    likes: 2,
+    comments: ['comment1', 'comment2', 'comment3'],
+  };
+};

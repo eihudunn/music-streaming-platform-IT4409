@@ -1,12 +1,12 @@
-import NextAuth from "next-auth/next";
-import GoogleProvider from "next-auth/providers/google";
-import GithubProvider from "next-auth/providers/github";
-import CredentialsProvider from "next-auth/providers/credentials";
-import { connectDB } from "@/app/_utils/database";
-import { signIn } from "next-auth/react";
-import { connectMongoDB } from "@/lib/mongodb";
-import bcrypt from "bcrypt";
-import User from "@/scheme/User";
+import NextAuth from 'next-auth/next';
+import GoogleProvider from 'next-auth/providers/google';
+import GithubProvider from 'next-auth/providers/github';
+import CredentialsProvider from 'next-auth/providers/credentials';
+import { connectDB } from '@/app/_utils/database';
+import { signIn } from 'next-auth/react';
+import { connectMongoDB } from '@/lib/mongodb';
+import bcrypt from 'bcrypt';
+import User from '@/scheme/User';
 const handler = NextAuth({
   providers: [
     GoogleProvider({
@@ -18,33 +18,33 @@ const handler = NextAuth({
       clientSecret: process.env.GITHUB_CLIENT_SECRET as string,
     }),
     CredentialsProvider({
-      name: "credentials",
+      name: 'credentials',
       credentials: {
-        email: { label: "Email", type: "email" },
-        password: { label: "Password", type: "password" },
+        email: { label: 'Email', type: 'email' },
+        password: { label: 'Password', type: 'password' },
       },
       async authorize(credentials) {
         await connectMongoDB();
 
         if (!credentials?.email || !credentials?.password) {
-          throw new Error("Please enter your email and password");
+          throw new Error('Please enter your email and password');
         }
 
         const user = await User.findOne({ email: credentials?.email });
-        console.log("User found:", user);
+        console.log('User found:', user);
 
         if (!user || !user?.password) {
-          throw new Error("No user found");
+          throw new Error('No user found');
         }
 
         const isValidPassword = await bcrypt.compare(
           credentials.password,
-          user.password
+          user.password,
         );
-        console.log("Password is valid:", isValidPassword);
+        console.log('Password is valid:', isValidPassword);
 
         if (!isValidPassword) {
-          throw new Error("Invalid password");
+          throw new Error('Invalid password');
         }
         return user;
       },
@@ -52,9 +52,9 @@ const handler = NextAuth({
   ],
   secret: process.env.SECRET,
   session: {
-    strategy: "jwt",
+    strategy: 'jwt',
   },
-  debug: process.env.NODE_ENV === "development",
+  debug: process.env.NODE_ENV === 'development',
   callbacks: {
     async jwt({ token, user }) {
       await connectMongoDB();
@@ -66,7 +66,7 @@ const handler = NextAuth({
       return session;
     },
     async signIn({ user, account }) {
-      if (account?.provider === "google" || account?.provider === "github") {
+      if (account?.provider === 'google' || account?.provider === 'github') {
         const { name, email } = user;
         try {
           await connectMongoDB();
@@ -74,16 +74,16 @@ const handler = NextAuth({
           const userExists = await User.findOne({ email });
 
           if (!userExists) {
-            const res = await fetch("http://localhost:3000/api/user", {
-              method: "POST",
+            const res = await fetch('http://localhost:3000/api/user', {
+              method: 'POST',
               body: JSON.stringify({ name, email }),
               headers: {
-                "Content-Type": "application/json",
+                'Content-Type': 'application/json',
               },
             });
             if (res.ok) {
               const data = await res.json();
-              console.log("data:", data);
+              console.log('data:', data);
               return data.user;
             }
           }

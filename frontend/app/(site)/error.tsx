@@ -1,7 +1,7 @@
-"use client";
+'use client';
 
-import Box from "@/components/Box";
-import React from "react";
+import Box from '@/components/Box';
+import React from 'react';
 
 const Error = () => {
   return (

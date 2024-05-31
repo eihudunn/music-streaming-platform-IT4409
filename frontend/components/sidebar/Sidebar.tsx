@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import { usePathname } from "next/navigation";
 import { useEffect, useMemo, useRef, useState } from "react";
@@ -107,25 +107,25 @@ const Sidebar: React.FC<SidebarProp> = ({ children }) => {
     () => [
       {
         icon: HiHome,
-        label: "Home",
-        active: pathname !== "/search",
-        href: "/",
+        label: 'Home',
+        active: pathname !== '/search',
+        href: '/',
       },
       {
         icon: BiSearch,
-        label: "Search",
-        active: pathname === "/search",
-        href: "/search",
+        label: 'Search',
+        active: pathname === '/search',
+        href: '/search',
       },
     ],
-    [pathname]
+    [pathname],
   );
 
   return (
     <div
       className={twMerge(
-        "flex h-full",
-        player.activeId && "h-[calc(100%-80px)]"
+        'flex h-full',
+        player.activeId && 'h-[calc(100%-72px)]',
       )}
     >
       <div

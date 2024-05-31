@@ -1,35 +1,35 @@
-"use client";
+'use client';
 
-import { Icon } from "@iconify/react";
-import TextInput from "@/components/auth/TextInput";
-import PasswordInput from "@/components/auth/PasswordInput";
-import Link from "next/link";
-import GoogleLogin from "@/components/auth/GoogleLogin";
-import FacebookLogin from "@/components/auth/FacebookLogin";
-import Head from "next/head";
-import { useEffect, useState } from "react";
-import { signIn, useSession } from "next-auth/react";
-import toast from "react-hot-toast";
-import GithubLogin from "@/components/auth/GIthubLogin";
-import { useRouter } from "next/navigation";
+import { Icon } from '@iconify/react';
+import TextInput from '@/components/auth/TextInput';
+import PasswordInput from '@/components/auth/PasswordInput';
+import Link from 'next/link';
+import GoogleLogin from '@/components/auth/GoogleLogin';
+import FacebookLogin from '@/components/auth/FacebookLogin';
+import Head from 'next/head';
+import { useEffect, useState } from 'react';
+import { signIn, useSession } from 'next-auth/react';
+import toast from 'react-hot-toast';
+import GithubLogin from '@/components/auth/GIthubLogin';
+import { useRouter } from 'next/navigation';
 
 const LoginComponent = () => {
   const { data: session, status } = useSession();
   const router = useRouter();
   const [data, setData] = useState({
-    email: "",
-    password: "",
+    email: '',
+    password: '',
   });
 
   console.log(session);
   useEffect(() => {
-    if (status === "authenticated") {
-      router.push("/");
+    if (status === 'authenticated') {
+      router.push('/');
     }
   });
   const handleLogin = async () => {
     console.log(data);
-    signIn("credentials", {
+    signIn('credentials', {
       redirect: false,
       ...data,
     })
@@ -40,7 +40,7 @@ const LoginComponent = () => {
         }
 
         if (callback?.ok && !callback?.error) {
-          toast.success("Logged in successfully");
+          toast.success('Logged in successfully');
         }
       })
       .catch((error) => {
@@ -64,8 +64,8 @@ const LoginComponent = () => {
           <div className="inputRegion py-10 md:w-[734px] w-full flex flex-col bg-black rounded-md">
             <div className="flex flex-col items-center justify-center">
               <div className="font-bold text-white text-4xl tracking-tighter my-12">
-                {" "}
-                Log in to Spotify{" "}
+                {' '}
+                Log in to Spotify{' '}
               </div>
               <div className="w-full items-center justify-center flex flex-col">
                 <GoogleLogin />

@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import { useRouter } from "next/navigation";
 import { BiHome, BiSearch } from "react-icons/bi";
@@ -29,11 +29,11 @@ const Header: React.FC<HeaderProps> = ({
   const { status, data: session } = useSession();
 
   const handleLogin = () => {
-    router.push("/login");
+    router.push('/login');
   };
 
   const handleSignup = () => {
-    router.push("/signup");
+    router.push('/signup');
   };
 
   return (
@@ -67,7 +67,7 @@ const Header: React.FC<HeaderProps> = ({
           </button>
         </div>
         <div className="flex justify-between items-center gap-x-4">
-          {status === "authenticated" ? (
+          {status === 'authenticated' ? (
             <>
               <div>
                 <Button
@@ -82,7 +82,7 @@ const Header: React.FC<HeaderProps> = ({
                   alt="avt"
                   className="rounded-full"
                   src={
-                    (session?.user?.picture as string) || "/images/default.png"
+                    (session?.user?.picture as string) || '/images/default.png'
                   }
                   width={60}
                   height={60}

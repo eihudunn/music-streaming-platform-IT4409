@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import { Song } from "@/scheme/Song";
 import Image from "next/image";
@@ -21,7 +21,7 @@ const SongItem: React.FC<SongItemProps> = ({ data, onClick }) => {
       <div className="relative aspect-square w-full h-full rounded-md overflow-hidden">
         <Image
           className="object-cover"
-          src={data.img || "/images/default.png"}
+          src={data.img || '/images/default.png'}
           fill
           alt="Song image"
         />

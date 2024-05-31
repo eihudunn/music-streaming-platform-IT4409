@@ -1,9 +1,9 @@
-import axiosClient from "@/app/_utils/GlobalApi";
-import { Song } from "@/scheme/Song";
+import axiosClient from '@/app/_utils/GlobalApi';
+import { Song } from '@/scheme/Song';
 
 const getSongs = async (): Promise<Song[]> => {
   try {
-    const { data } = await axiosClient.get("/song/get");
+    const { data } = await axiosClient.get('/song/get');
     const res = data.map((song: any) => {
       song.id = song._id;
       delete song._id;

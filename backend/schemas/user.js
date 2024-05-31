@@ -38,6 +38,10 @@ const UserSchema = mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Album'
     }],
+    likedTracks: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Track'
+    }], 
     preferedGenre: [{
         genre: {
             type: String,

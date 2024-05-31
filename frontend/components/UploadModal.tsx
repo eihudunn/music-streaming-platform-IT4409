@@ -1,15 +1,15 @@
-"use client";
+'use client';
 
-import uniqid from "uniqid";
-import useUploadModal from "@/hooks/useUploadModal";
-import Modal from "./Modal";
-import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
-import { useState } from "react";
-import Input from "./Input";
-import Button from "./Button";
-import toast from "react-hot-toast";
-import { useRouter } from "next/navigation";
-import createSong from "@/actions/createSong";
+import uniqid from 'uniqid';
+import useUploadModal from '@/hooks/useUploadModal';
+import Modal from './Modal';
+import { FieldValues, SubmitHandler, useForm } from 'react-hook-form';
+import { useState } from 'react';
+import Input from './Input';
+import Button from './Button';
+import toast from 'react-hot-toast';
+import { useRouter } from 'next/navigation';
+import createSong from '@/actions/createSong';
 
 const UploadModal = () => {
   const uploadModal = useUploadModal();
@@ -18,8 +18,8 @@ const UploadModal = () => {
 
   const { register, handleSubmit, reset } = useForm<FieldValues>({
     defaultValues: {
-      artist: "",
-      title: "",
+      artist: '',
+      title: '',
       song: null,
       img: null,
     },
@@ -41,11 +41,11 @@ const UploadModal = () => {
       values.songFile = songFile;
 
       //fix later
-      values.userId = "6649f6e3a346c5d8b2d90d81";
+      values.userId = '6649f6e3a346c5d8b2d90d81';
       console.log(values);
 
       if (!imageFile || !songFile) {
-        toast.error("Missing required file!");
+        toast.error('Missing required file!');
         return;
       }
 
@@ -54,11 +54,11 @@ const UploadModal = () => {
 
       router.refresh();
       setIsLoading(false);
-      toast.success("Song created!");
+      toast.success('Song created!');
       reset();
       uploadModal.onClose();
     } catch (error) {
-      toast.error("Something went wrong");
+      toast.error('Something went wrong');
     } finally {
       setIsLoading(false);
     }
@@ -75,13 +75,13 @@ const UploadModal = () => {
         <Input
           id="title"
           disabled={isLoading}
-          {...register("title", { required: true })}
+          {...register('title', { required: true })}
           placeholder="Song title"
         />
         <Input
           id="artist"
           disabled={isLoading}
-          {...register("artist", { required: true })}
+          {...register('artist', { required: true })}
           placeholder="Song artist"
         />
         <div>
@@ -90,7 +90,7 @@ const UploadModal = () => {
             id="song"
             type="file"
             disabled={isLoading}
-            {...register("song", { required: true })}
+            {...register('song', { required: true })}
             accept=".mp3"
           />
         </div>
@@ -100,7 +100,7 @@ const UploadModal = () => {
             id="image"
             type="file"
             disabled={isLoading}
-            {...register("image", { required: true })}
+            {...register('image', { required: true })}
             accept="image/*"
           />
         </div>

@@ -1,12 +1,12 @@
-"use client";
+'use client';
 
-import { connectMongoDB } from "@/lib/mongodb";
-import User from "@/scheme/User";
-import axios from "axios";
-import { getToken } from "next-auth/jwt";
-import { useSession } from "next-auth/react";
-import { headers } from "next/headers";
-import React, { useEffect, useState } from "react";
+import { connectMongoDB } from '@/lib/mongodb';
+import User from '@/scheme/User';
+import axios from 'axios';
+import { getToken } from 'next-auth/jwt';
+import { useSession } from 'next-auth/react';
+import { headers } from 'next/headers';
+import React, { useEffect, useState } from 'react';
 
 export const UserContext = React.createContext(null);
 

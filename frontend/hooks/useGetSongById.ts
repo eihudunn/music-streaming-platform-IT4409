@@ -1,6 +1,6 @@
-import getSongBySongId from "@/actions/getSongBySongId";
-import { Song } from "@/scheme/Song";
-import { useEffect, useMemo, useState } from "react";
+import getSongBySongId from '@/actions/getSongBySongId';
+import { Song } from '@/scheme/Song';
+import { useEffect, useMemo, useState } from 'react';
 
 const useGetSongById = (id: string) => {
   const [isLoading, setIsLoading] = useState(false);
@@ -23,7 +23,7 @@ const useGetSongById = (id: string) => {
       isLoading,
       song,
     }),
-    [isLoading, song]
+    [isLoading, song],
   );
 };
 

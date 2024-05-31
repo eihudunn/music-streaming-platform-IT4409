@@ -5,6 +5,7 @@ const trackRoutes = require("./routes/track.js");
 const searchRoutes = require("./routes/search.js");
 const userRoutes = require("./routes/user.js");
 const playlistRoutes = require("./routes/playlist.js");
+const albumRoutes = require("./routes/album.js")
 const bodyParser = require("body-parser");
 require("dotenv").config();
 const app = express();
@@ -19,6 +20,7 @@ app.use("/song", trackRoutes);
 app.use("/user", userRoutes);
 app.use("/search", searchRoutes);
 app.use("/playlist", playlistRoutes);
+app.use('/album', albumRoutes);
 
 // Updated Mongoose connection with deprecation warnings fixed
 mongoose

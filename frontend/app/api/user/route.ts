@@ -1,7 +1,7 @@
-import { connectMongoDB } from "@/lib/mongodb";
-import User from "@/scheme/User";
-import axios from "axios";
-import { NextResponse } from "next/server";
+import { connectMongoDB } from '@/lib/mongodb';
+import User from '@/scheme/User';
+import axios from 'axios';
+import { NextResponse } from 'next/server';
 
 export async function POST(request) {
   const { name, email, password } = await request.json();
@@ -14,7 +14,7 @@ export async function POST(request) {
     // Add any other properties that you want to send back
   };
   return NextResponse.json(
-    { message: "User Registered Successfully", user: userResponse },
-    { status: 201 }
+    { message: 'User Registered Successfully', user: userResponse },
+    { status: 201 },
   );
 }
