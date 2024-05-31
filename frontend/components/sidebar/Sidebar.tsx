@@ -145,9 +145,9 @@ const Sidebar: React.FC<SidebarProp> = ({ children }) => {
       </div>
       <div
         ref={resizerRef}
-        className="resizer hidden md:flex w-1 cursor-col-resize h-full bg-green-500"
+        className="resizer hidden md:flex w-1 mr-2 cursor-grab h-full hover:bg-white"
       ></div>
-      <main className="h-full flex-1 overflow-y-auto py-2">{children}</main>
+      <main className="h-full flex-1 overflow-y-auto py-2 rounded-lg">{children}</main>
     </div>
   );
 };

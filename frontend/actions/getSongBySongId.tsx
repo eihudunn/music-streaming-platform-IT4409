@@ -7,9 +7,7 @@ const getSongBySongId = async (id: string): Promise<Song | null> => {
     const { data } = await axiosClient.get(`/song/get/${id}`);
     data.id = data._id;
     delete data._id;
-    console.log('data', data.song);
-    const song = data.song ? data : getDefaultSong();
-    return song || null;
+    return data || null;
   } catch (error) {
     console.log(error);
 
