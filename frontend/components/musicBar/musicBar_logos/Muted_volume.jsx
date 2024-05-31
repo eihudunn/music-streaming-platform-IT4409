@@ -2,10 +2,10 @@ import * as React from 'react';
 const MutedVolume = (props) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
-    width={16}
     height={16}
     fill="currentColor"
     aria-label="Volume d\xE9sactiv\xE9"
+    viewBox="0 0 16 16"
     {...props}
   >
     <path d="M13.86 5.47a.75.75 0 0 0-1.061 0l-1.47 1.47-1.47-1.47A.75.75 0 0 0 8.8 6.53L10.269 8l-1.47 1.47a.75.75 0 1 0 1.06 1.06l1.47-1.47 1.47 1.47a.75.75 0 0 0 1.06-1.06L12.39 8l1.47-1.47a.75.75 0 0 0 0-1.06z" />

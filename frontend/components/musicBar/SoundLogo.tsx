@@ -5,7 +5,6 @@ import MutedVolume from '@/components/musicBar/musicBar_logos/Muted_volume';
 import LowVolume from '@/components/musicBar/musicBar_logos/low_volume';
 import MediumVolume from '@/components/musicBar/musicBar_logos/Medium_volume';
 import HighVolume from '@/components/musicBar/musicBar_logos/High_volume';
-import ConfigButton from './ConfigButton';
 
 interface SoundLogoProps {
   volume: number;
@@ -29,7 +28,27 @@ const SoundLogo: React.FC<SoundLogoProps> = ({ volume }) => {
     return null; // Wait for client-side render
   }
 
-  return <ConfigButton>{getVolumeIcon()}</ConfigButton>;
+  return (
+    <button
+      className="
+      bg-transparent
+      transition 
+      ease-in-out 
+      opacity-70 
+      w-8 
+      h-8
+      cursor:pointer
+      hover:scale-105
+      hover:opacity-100
+      hover:green-slider
+      active:scale-100
+      active:opacity-70
+      pl-2
+      "
+    >
+      {getVolumeIcon()}
+    </button>
+  );
 };
 
 export default SoundLogo;
