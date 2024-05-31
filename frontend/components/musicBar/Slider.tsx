@@ -70,9 +70,6 @@ const Slider: React.FC<SliderProps> = ({ value = 1, onChange }) => {
           h-3
           shadow-md 
           rounded-full
-          // hover:bg-white
-          // hover:outline-none
-          // hover:white
           "
         style={{ backgroundColor: isHovered ? 'white' : 'transparent' }}
         aria-label="Volume"

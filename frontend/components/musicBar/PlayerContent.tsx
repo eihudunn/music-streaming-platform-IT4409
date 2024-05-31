@@ -13,6 +13,8 @@ import Slider from './Slider';
 import usePlayer from '@/hooks/usePlayer';
 import SoundLogo from './SoundLogo';
 import ConfigButton from './ConfigButton';
+import IconWrapper from '@/components/musicBar/musicBar_logos/Icon_wrapper';
+import NowPlayIngView from '@/components/musicBar/musicBar_logos/Now_playing_view';
 import WaitList from '@/components/musicBar/musicBar_logos/Wait_list';
 import Microphone from '@/components/musicBar/musicBar_logos/Microphone';
 import Speaker from '@/components/musicBar/musicBar_logos/Speaker';
@@ -105,7 +107,7 @@ const PlayerContent: React.FC<PlayerContentProps> = ({ song, songUrl }) => {
           <LikeButton songId={song.id} />
         </div>
       </div>
-      <div className="flex md:hidden col-auto w-full justify-end items-center">
+      <div className="flex md:hidden col-auto w-full justify-end items-center ">
         <div
           onClick={handlePlay}
           className="h-10 w-10 flex items-center justify-center rounded-full bg-white p-1 cursor-pointer"
@@ -113,7 +115,7 @@ const PlayerContent: React.FC<PlayerContentProps> = ({ song, songUrl }) => {
           <Icon size={30} className="text-black" />
         </div>
       </div>
-      <div className="hidden h-full md:flex justify-center items-center w-full max-w-[722px] gap-x-6">
+      <div className="h-full md:flex justify-center items-center w-full max-w-[722px] gap-x-6">
         <AiFillStepBackward
           onClick={onPlayPrevious}
           size={30}
@@ -141,20 +143,38 @@ const PlayerContent: React.FC<PlayerContentProps> = ({ song, songUrl }) => {
           className="text-neutral-400 cursor-pointer hover:text-white transition"
         />
       </div>
-      <div className="hidden md:flex w-full justify-end pr-2">
-        <div className="flex items-center justify-center col-span-3 gap-3 pr-2">
+      <div className="hidden md:flex w-full justify-end items-center ">
+        <div className="flex items-center justify-center col-span-3 ">
           {/* config button */}
           <ConfigButton>
-            <Microphone />
+            <NowPlayIngView className="pl-2" />
           </ConfigButton>
           <ConfigButton>
-            <WaitList />
+            <Microphone className="pl-2" />
           </ConfigButton>
           <ConfigButton>
-            <Speaker />
+            <WaitList className="pl-2" />
+          </ConfigButton>
+          <ConfigButton>
+            <Speaker className="pl-2" />
+          </ConfigButton>
+          <div className="flex items-center justify-center w-[125px]">
+            <div className="flex" onClick={toggleMute}>
+              <SoundLogo volume={volume} />
+            </div>
+            {/* <VolumeIcon
+                onClick={toggleMute}
+                size={34}
+                className="cursor-pointer"
+              /> */}
+            {/* <VolumeSlider  changeVolume={(value) => setVolume(value)} /> */}
+            <Slider value={volume} onChange={(value) => setVolume(value)} />
+          </div>
+          <ConfigButton>
+            <IconWrapper className="absolute left-1/2 -translate-x-1/2 -translate-y-1/2" />
           </ConfigButton>
         </div>
-        <div className="flex items-center gap-x-2 w-[120px]">
+        {/* <div className="flex items-center justify-center gap-x-2 w-[120px]">
           <div className="inline-flex" onClick={toggleMute}>
             <SoundLogo volume={volume} />
           </div>
@@ -162,10 +182,12 @@ const PlayerContent: React.FC<PlayerContentProps> = ({ song, songUrl }) => {
             onClick={toggleMute}
             size={34}
             className="cursor-pointer"
-          /> */}
-          {/* <VolumeSlider  changeVolume={(value) => setVolume(value)} /> */}
+          /> 
           <Slider value={volume} onChange={(value) => setVolume(value)} />
-        </div>
+          <ConfigButton>
+            <IconWrapper className="absolute left-1/2 -translate-x-1/2 -translate-y-1/2"/>
+          </ConfigButton>
+        </div> */}
       </div>
     </div>
   );
