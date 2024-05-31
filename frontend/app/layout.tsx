@@ -1,8 +1,7 @@
 import type { Metadata } from 'next';
 import { Figtree, Play } from 'next/font/google';
 import { Toaster } from 'react-hot-toast';
-
-import './globals.css';
+import "./globals.css";
 import Sidebar from '@/components/sidebar/Sidebar';
 import ModalProvider from '@/providers/ModalProvider';
 import fakeGetSongById from '@/actions/api/getSongByUserId';
@@ -36,7 +35,7 @@ export default function RootLayout({
         <NextAuthProvider>
           <ModalProvider />
           <Toaster />
-          <Sidebar songs={userSong}>{children}</Sidebar>
+          <Sidebar>{children}</Sidebar>
           <Player />
         </NextAuthProvider>
       </body>

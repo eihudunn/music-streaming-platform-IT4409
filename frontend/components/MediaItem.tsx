@@ -1,7 +1,9 @@
 'use client';
 
-import { Song } from '@/scheme/Song';
-import Image from 'next/image';
+import { LibraryType } from "@/const/libraryType";
+import { Playlist } from "@/scheme/Playlist";
+import { Song } from "@/scheme/Song";
+import Image from "next/image";
 
 interface MediaItemProps {
   onClick?: (id: string) => void;
@@ -13,11 +15,12 @@ const MediaItem: React.FC<MediaItemProps> = ({ data, style, onClick }) => {
   const imageUrl = data.img;
 
   const handleClick = () => {
-    if (onClick) {
+    if (onClick && data.type === LibraryType.Song) {
       return onClick(data.id);
     }
     //turn on player
   };
+  
   return (
     <div
       onClick={handleClick}
@@ -36,7 +39,7 @@ const MediaItem: React.FC<MediaItemProps> = ({ data, style, onClick }) => {
       </div>
       <div className="flex flex-col gap-y-1 overflow-hidden">
         <p className="text-white truncate">{data.title}</p>
-        <p className="text-neutral-400 text-sm truncate">{data.artist}</p>
+        <p className="text-neutral-400 text-sm truncate">{data.type}</p>
       </div>
     </div>
   );

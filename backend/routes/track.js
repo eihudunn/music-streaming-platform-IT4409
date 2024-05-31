@@ -8,6 +8,7 @@ const {
   trackSuggestion,
   getTracksById,
   playTrack,
+  getTracksByUserId,
   likeTracks, 
   unlikeTracks
 } = require("../controllers/track.controller");
@@ -28,6 +29,7 @@ const upload = multer({ storage });
 
 router.get("/get", getTracks);
 router.get("/get/:id", getTracksById);
+router.get("/get/user/:userId", getTracksByUserId);
 router.post(
   "/post",
   upload.fields([{ name: "song" }, { name: "img" }]),

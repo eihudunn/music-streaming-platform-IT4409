@@ -1,5 +1,6 @@
 'use client';
 
+import { useState } from 'react';
 import * as RadixSlider from '@radix-ui/react-slider';
 
 interface SliderProps {
@@ -10,6 +11,17 @@ interface SliderProps {
 const Slider: React.FC<SliderProps> = ({ value = 1, onChange }) => {
   const handleChange = (newValue: number[]) => {
     onChange?.(newValue[0]);
+    console.log(newValue);
+  };
+
+  const [isHovered, setIsHovered] = useState(false);
+
+  const handleMouseEnter = () => {
+    setIsHovered(true);
+  };
+
+  const handleMouseLeave = () => {
+    setIsHovered(false);
   };
 
   return (
@@ -25,6 +37,8 @@ const Slider: React.FC<SliderProps> = ({ value = 1, onChange }) => {
       "
       defaultValue={[1]}
       value={[value]}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
       onValueChange={handleChange}
       max={1}
       step={0.1}
@@ -36,31 +50,28 @@ const Slider: React.FC<SliderProps> = ({ value = 1, onChange }) => {
           relative 
           grow 
           rounded-full 
-          h-[3px]
+          h-[4px]
         "
       >
         <RadixSlider.Range
           className="
             absolute 
             bg-white
-            active:bg-green-500 
             rounded-full 
             h-full
           "
+          style={{ backgroundColor: isHovered ? '#1db954' : 'white' }}
         />
       </RadixSlider.Track>
       <RadixSlider.Thumb
         className="
           block 
-          w-5 
-          h-5
-          bg-white 
+          w-3 
+          h-3
           shadow-md 
           rounded-full
-          focus:outline-none
-          focus:ring-1
-          focus:ring-green-500
           "
+        style={{ backgroundColor: isHovered ? 'white' : 'transparent' }}
         aria-label="Volume"
       />
     </RadixSlider.Root>

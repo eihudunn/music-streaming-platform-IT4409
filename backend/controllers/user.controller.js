@@ -16,13 +16,13 @@ cloudinary.config({
 });
 
 const getUsers = async (req, res) => {
-    try {
-        const users = await User.find();
-        res.json(users);
-    } catch (error) {
-        res.status(500).json({ message: error.message });
-    }
-}
+  try {
+    const users = await User.find();
+    res.json(users);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
 
 const postUser = async (req, res) => {
     try {
@@ -120,7 +120,9 @@ const deleteUser = async (req, res) => {
                 res.json({ message: 'User deleted successfully', user });
             }
         });
-    } catch (error) {
+      })
+    }
+  } catch (error) {
         res.status(500).json({ message: error.message });
     }
 }

@@ -1,8 +1,8 @@
-import fakeGetSong from "@/actions/api/getSong";
-import Header from "@/components/Header";
-import Image from "next/image";
-import React from "react";
-import LikedContent from "./components/LikedContent";
+import fakeGetSong from '@/actions/api/getSong';
+import Header from '@/components/Header';
+import Image from 'next/image';
+import React from 'react';
+import LikedContent from './components/LikedContent';
 
 export const revalidate = 0;
 
@@ -32,7 +32,7 @@ const Liked = async () => {
           </div>
         </div>
       </Header>
-      <LikedContent songs = {songs} />
+      <LikedContent songs={songs} />
     </div>
   );
 };
