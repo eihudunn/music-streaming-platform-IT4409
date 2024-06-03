@@ -3,7 +3,7 @@ interface Album {
   searchTitle?: string;
   img: string;
   artist: string;
-  uploadId: string;
+  artistId: string;
   genre: string;
   tracks: string[];
   likes: number;
@@ -11,6 +11,7 @@ interface Album {
   type?: string;
   createdAt?: Date;
   updatedAt?: Date;
+  artistData?: any;
 }
 
 export default Album;

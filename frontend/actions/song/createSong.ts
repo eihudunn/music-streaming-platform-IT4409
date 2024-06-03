@@ -1,5 +1,7 @@
 import axiosClient from '@/app/_utils/GlobalApi';
 import { Song } from '@/scheme/Song';
+import { Erica_One } from 'next/font/google';
+import toast from 'react-hot-toast';
 
 export interface SongRequest {
   songFile: File;
@@ -9,7 +11,7 @@ export interface SongRequest {
   userId: string | Blob;
 }
 
-const createSong = async (songRequest: SongRequest): Promise<Song[]> => {
+const createSong = async (songRequest: SongRequest): Promise<Song[] | null> => {
   try {
     const formData = new FormData();
     formData.append('song', songRequest.songFile);
@@ -20,15 +22,10 @@ const createSong = async (songRequest: SongRequest): Promise<Song[]> => {
 
     const { data } = await axiosClient.post('/song/post', formData);
     console.log(data);
-    const res = data.map((song: any) => {
-      song.id = song._id;
-      delete song._id;
-      return song;
-    });
-    return res || [];
+    return data.track || [];
   } catch (error) {
     console.log(error);
-    return [];
+    return null;
   }
 };
 

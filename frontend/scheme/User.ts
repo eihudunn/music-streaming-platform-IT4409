@@ -1,4 +1,4 @@
-import mongoose, { models, Schema } from "mongoose";
+import mongoose, { models, Schema } from 'mongoose';
 
 const UserSchema = new Schema(
   {
@@ -18,25 +18,25 @@ const UserSchema = new Schema(
     following: [
       {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "User",
+        ref: 'User',
       },
     ],
     artistFollowed: [
       {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "User",
+        ref: 'User',
       },
     ],
     playlists: [
       {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "Track",
+        ref: 'Track',
       },
     ],
     albumsFollowed: [
       {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "Album",
+        ref: 'Album',
       },
     ],
     preferedGenre: [
@@ -52,15 +52,16 @@ const UserSchema = new Schema(
       },
     ],
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
-const User = models?.User || mongoose.model("User", UserSchema);
+const User = models?.User || mongoose.model('User', UserSchema);
 export default User;
 
 export interface UserDto {
   username: string;
   searchTitle?: string;
+  avatarImg?: string;
   email?: string;
   password?: string;
   following?: string[];
