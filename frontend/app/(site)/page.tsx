@@ -9,7 +9,7 @@ export default async function Home() {
   const songs = await getSongs();
 
   return (
-    <div className="bg-neutral-900 rounded-lg h-full w-full overflow-hidden overflow-y-auto">
+    <div className="bg-neutral-900 rounded-lg h-full w-full overflow-hidden scrollbar-webkit overflow-y-auto">
       <Header
         style={{
           backgroundImage: `linear-gradient(to bottom, #10b981 var(--tw-gradient-from-position), rgb(16 185 129 / 0) var(--tw-gradient-from-position) )`,
