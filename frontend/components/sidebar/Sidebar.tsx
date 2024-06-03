@@ -1,20 +1,22 @@
 'use client';
 
-import { usePathname } from "next/navigation";
-import { useEffect, useMemo, useRef, useState } from "react";
-import { BiSearch } from "react-icons/bi";
-import { HiHome } from "react-icons/hi";
-import Box from "../Box";
-import SidebarItem from "./SidebarItem";
-import Library from "../Library";
-import { Song } from "@/scheme/Song";
-import usePlayer from "@/hooks/usePlayer";
-import { twMerge } from "tailwind-merge";
-import { useSession } from "next-auth/react";
-import getSongByUserId from "@/actions/getSongByUserId";
-import "react-resizable/css/styles.css";
-import { Playlist } from "@/scheme/Playlist";
-import getPlaylistByUserId from "@/actions/getPlaylistByUserId";
+import { usePathname } from 'next/navigation';
+import { useEffect, useMemo, useRef, useState } from 'react';
+import { BiSearch } from 'react-icons/bi';
+import { HiHome } from 'react-icons/hi';
+import Box from '../Box';
+import SidebarItem from './SidebarItem';
+import Library from '../Library';
+import { Song } from '@/scheme/Song';
+import usePlayer from '@/hooks/usePlayer';
+import { twMerge } from 'tailwind-merge';
+import { useSession } from 'next-auth/react';
+import getSongByUserId from '@/actions/song/getSongByUserId';
+import 'react-resizable/css/styles.css';
+import { Playlist } from '@/scheme/Playlist';
+import getPlaylistByUserId from '@/actions/playlist/getPlaylistByUserId';
+import Album from '@/scheme/Album';
+import getAlbumByUserId from '@/actions/album/getAlbumByUserId';
 
 interface SidebarProp {
   children: React.ReactNode;
@@ -47,11 +49,25 @@ const Sidebar: React.FC<SidebarProp> = ({ children }) => {
     }
   }, [session]);
 
-  const [userContent, setUserContent] = useState<(Song | Playlist)[]>([]);
+  const [userAlbums, setUserAlbums] = useState<Album[]>([]);
 
   useEffect(() => {
-    setUserContent([...userSong, ...userPlaylists]);
-  }, [userSong, userPlaylists]);
+    const getAlbums = async () => {
+      const res = await getAlbumByUserId(session?.user?._doc._id);
+      setUserAlbums(res || []);
+    };
+    if (session) {
+      getAlbums();
+    }
+  }, [session]);
+
+  const [userContent, setUserContent] = useState<(Song | Playlist | Album)[]>(
+    [],
+  );
+
+  useEffect(() => {
+    setUserContent([...userSong, ...userPlaylists, ...userAlbums]);
+  }, [userSong, userPlaylists, userAlbums]);
 
   const [sidebarWidth, setSidebarWidth] = useState(400); // initial sidebar width
   const resizerRef = useRef(null);
@@ -69,29 +85,29 @@ const Sidebar: React.FC<SidebarProp> = ({ children }) => {
 
         w = sidebarWidth;
 
-        document.addEventListener("mousemove", rs_mousemoveHandler);
-        document.addEventListener("mouseup", rs_mouseupHandler);
+        document.addEventListener('mousemove', rs_mousemoveHandler);
+        document.addEventListener('mouseup', rs_mouseupHandler);
       }
 
       function rs_mousemoveHandler(e) {
         e.preventDefault();
-        var dx = e.clientX - x;
+        const dx = e.clientX - x;
 
-        var cw = w + dx; // complete width
+        const cw = w + dx; // complete width
 
-        if (cw < 1600 && cw > 300) {
+        if (cw < 1500 && cw > 300) {
           setSidebarWidth(cw);
         }
       }
 
       function rs_mouseupHandler() {
         // remove event mousemove && mouseup
-        document.removeEventListener("mouseup", rs_mouseupHandler);
-        document.removeEventListener("mousemove", rs_mousemoveHandler);
+        document.removeEventListener('mouseup', rs_mouseupHandler);
+        document.removeEventListener('mousemove', rs_mousemoveHandler);
       }
 
       if (resizer) {
-        resizer.addEventListener("mousedown", rs_mousedownHandler);
+        resizer.addEventListener('mousedown', rs_mousedownHandler);
       }
     }
 
@@ -129,7 +145,7 @@ const Sidebar: React.FC<SidebarProp> = ({ children }) => {
       )}
     >
       <div
-        className={`hidden md:flex flex-col gap-y-2 bg-black h-full p-2`}
+        className={`hidden md:flex flex-col gap-y-2 bg-black h-full py-2 pl-2`}
         style={{ width: `${sidebarWidth}px` }}
       >
         <Box>
@@ -145,9 +161,11 @@ const Sidebar: React.FC<SidebarProp> = ({ children }) => {
       </div>
       <div
         ref={resizerRef}
-        className="resizer hidden md:flex w-1 mr-2 cursor-grab h-full hover:bg-white"
+        className="resizer hidden md:flex w-[2px] mx-1 cursor-grab h-full hover:bg-[#727272]"
       ></div>
-      <main className="h-full flex-1 overflow-y-auto py-2 rounded-lg">{children}</main>
+      <main className="h-full flex-1 overflow-y-auto py-2 rounded-lg">
+        {children}
+      </main>
     </div>
   );
 };

@@ -1,12 +1,14 @@
 import axiosClient from '@/app/_utils/GlobalApi';
-import { getDefaultSong } from './api/getSong';
+import { getDefaultSong } from '../api/getSong';
 import { Song } from '@/scheme/Song';
 
 const getSongBySongId = async (id: string): Promise<Song | null> => {
   try {
-    const { data } = await axiosClient.get(`/song/get/${id}`);
+    const res = await axiosClient.get(`/song/get/${id}`);
+    const data = res.data[0];
     data.id = data._id;
     delete data._id;
+    console.log(data);
     return data || null;
   } catch (error) {
     console.log(error);

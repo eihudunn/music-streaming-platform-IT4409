@@ -1,7 +1,7 @@
-import { Song } from "./Song";
+import { Song } from './Song';
 
-const mongoose = require("mongoose");
-const { search } = require("../routes/track");
+const mongoose = require('mongoose');
+const { search } = require('../routes/track');
 
 export interface Playlist {
   id: string;
@@ -15,4 +15,5 @@ export interface Playlist {
   type?: string;
   createdAt?: Date;
   updatedAt?: Date;
+  userData?: any;
 }

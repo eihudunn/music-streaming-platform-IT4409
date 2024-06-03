@@ -13,4 +13,5 @@ export interface Song {
   type?: string;
   createdAt?: Date;
   updatedAt?: Date;
+  artistData?: any;
 }

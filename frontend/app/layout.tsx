@@ -24,10 +24,6 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   // Get default songs
-  const userSong = fakeGetSongById().map((song) => ({
-    ...song,
-    searchTitle: '',
-  }));
 
   return (
     <html lang="en">

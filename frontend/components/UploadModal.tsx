@@ -9,12 +9,14 @@ import Input from './Input';
 import Button from './Button';
 import toast from 'react-hot-toast';
 import { useRouter } from 'next/navigation';
-import createSong from '@/actions/createSong';
+import createSong from '@/actions/song/createSong';
+import { useSession } from 'next-auth/react';
 
 const UploadModal = () => {
   const uploadModal = useUploadModal();
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
+  const { data: session } = useSession();
 
   const { register, handleSubmit, reset } = useForm<FieldValues>({
     defaultValues: {
@@ -40,8 +42,8 @@ const UploadModal = () => {
       values.imgFile = imageFile;
       values.songFile = songFile;
 
-      //fix later
-      values.userId = '6649f6e3a346c5d8b2d90d81';
+      values.artist = session?.user?._doc.username;
+      values.userId = session?.user?._doc._id;
       console.log(values);
 
       if (!imageFile || !songFile) {
@@ -49,18 +51,19 @@ const UploadModal = () => {
         return;
       }
 
-      // const uniqueID = uniqid();
       const res = await createSong(values);
-
+      if (!res) {
+        toast.error('Failed to create song');
+        return;
+      }
       router.refresh();
-      setIsLoading(false);
       toast.success('Song created!');
       reset();
-      uploadModal.onClose();
     } catch (error) {
       toast.error('Something went wrong');
     } finally {
       setIsLoading(false);
+      uploadModal.onClose();
     }
   };
 
@@ -78,12 +81,12 @@ const UploadModal = () => {
           {...register('title', { required: true })}
           placeholder="Song title"
         />
-        <Input
+        {/* <Input
           id="artist"
           disabled={isLoading}
           {...register('artist', { required: true })}
           placeholder="Song artist"
-        />
+        /> */}
         <div>
           <div className="pb-1">Select a song file</div>
           <Input

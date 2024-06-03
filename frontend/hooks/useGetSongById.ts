@@ -1,4 +1,4 @@
-import getSongBySongId from '@/actions/getSongBySongId';
+import getSongBySongId from '@/actions/song/getSongBySongId';
 import { Song } from '@/scheme/Song';
 import { useEffect, useMemo, useState } from 'react';
 

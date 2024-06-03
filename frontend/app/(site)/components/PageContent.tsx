@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from 'react';
 import { useSession } from 'next-auth/react';
 import fakeGetSong from '@/actions/api/getSong';
 import SongItem from '@/components/SongItem';
@@ -23,9 +23,9 @@ const PageContent: React.FC<PageContentProps> = ({ songs }) => {
     const handleResize = (entries) => {
       for (let entry of entries) {
         const gridWidth = entry.contentRect.width;
-        const columnWidth = 250; // adjust this value as needed
+        const columnWidth = 205; // adjust this value as needed
         setNumColumns(
-          Math.max(2, Math.min(6, Math.floor(gridWidth / columnWidth)))
+          Math.max(2, Math.min(9, Math.floor(gridWidth / columnWidth))),
         );
       }
     };
@@ -38,7 +38,7 @@ const PageContent: React.FC<PageContentProps> = ({ songs }) => {
     }
     // Clean up
     return () => {
-      resizeObserver.unobserve(grid!);
+      resizeObserver.unobserve(grid);
     };
   }, []);
 
@@ -55,17 +55,20 @@ const PageContent: React.FC<PageContentProps> = ({ songs }) => {
   return (
     <div
       ref={gridRef}
-      className="grid gap-4 mt-4"
+      className="grid gap-4 mt-4 max-w-[1885px]"
       style={{ gridTemplateColumns: `repeat(${numColumns}, 1fr)` }}
     >
-      {songs.map((item) => {
-        return (
-          <SongItem
-            key={item.id}
-            onClick={(id: string) => onPlay(id)}
-            data={item}
-          />
-        );
+      {songs.map((item, index) => {
+        if (index < numColumns) {
+          return (
+            <SongItem
+              key={item.id}
+              onClick={(id: string) => onPlay(id)}
+              data={item}
+            />
+          );
+        }
+        return null;
       })}
     </div>
   );

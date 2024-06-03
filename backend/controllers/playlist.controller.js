@@ -7,6 +7,7 @@ const {
   toLowerCaseNonAccentVietnamese,
 } = require("../helper/vietnameseTextToLowerCase.js");
 const mongoose = require("mongoose");
+const User = require("../schemas/user.js");
 
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
@@ -38,6 +39,14 @@ const getPlaylistById = async (req, res) => {
           localField: "tracks",
           foreignField: "_id",
           as: "tracks",
+        },
+      },
+      {
+        $lookup: {
+          from: "users",
+          localField: "userId",
+          foreignField: "_id",
+          as: "userData",
         },
       },
     ]);
@@ -90,6 +99,11 @@ const createPlaylist = async (req, res) => {
       userId,
     });
     await newPlaylist.save();
+    await User.findByIdAndUpdate(
+      userId,
+      { $push: { playlists: newPlaylist._id } },
+      { new: true, useFindAndModify: false }
+    );
     return res.status(201).json({ message: "Playlist created successfully" });
   } catch (error) {
     return res.status(500).json({ message: error.message });
@@ -115,6 +129,7 @@ const reactionPlaylist = async (req, res) => {
     return res.status(500).json({ message: error.message });
   }
 };
+
 module.exports = {
   reactionPlaylist,
   createPlaylist,

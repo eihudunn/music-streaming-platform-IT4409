@@ -17,3 +17,22 @@ body,
 .loginButton {
   background-color: #1ed760;
 }
+
+.main::-webkit-scrollbar {
+  width: 0px;
+}
+
+/* Show scrollbar on hover */
+.main:hover::-webkit-scrollbar {
+  width: 8px;
+}
+
+/* Style the scrollbar */
+.main:hover::-webkit-scrollbar-thumb {
+  background: #888; /* Color of the scroll thumb */
+  border-radius: 4px; /* Radius of the scroll thumb */
+}
+
+.main:hover::-webkit-scrollbar-thumb:hover {
+  background: #555; /* Color of the scroll thumb on hover */
+}

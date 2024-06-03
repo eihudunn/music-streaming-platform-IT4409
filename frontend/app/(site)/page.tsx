@@ -1,7 +1,7 @@
 import Header from '@/components/Header';
 import ListItem from '@/components/ListItem';
 import PageContent from './components/PageContent';
-import getSongs from '@/actions/getSongs';
+import getSongs from '@/actions/song/getSongs';
 
 export const revalidate = 1;
 
@@ -28,6 +28,13 @@ export default async function Home() {
         </div>
       </Header>
       <div className="mt-2 mb-7 px-6">
+        <div className="flex justify-between items-center">
+          <h1 className="text-white text-2xl font-semibold">Newest Songs</h1>
+        </div>
+        <div>
+          <PageContent songs={songs} />
+        </div>
+        <div className="break my-20"></div>
         <div className="flex justify-between items-center">
           <h1 className="text-white text-2xl font-semibold">Newest Songs</h1>
         </div>
