@@ -12,6 +12,8 @@ import { LibraryType } from '@/const/libraryType';
 import ArtistContent from '@/components/ArtistContent';
 import getSongByUserId from '@/actions/song/getSongByUserId';
 import { Song } from '@/scheme/Song';
+import getAlbumByUserId from '@/actions/album/getAlbumByUserId';
+import Album from '@/scheme/Album';
 
 const ArtistDetail = () => {
   const params = useParams<{ userId: string }>();
@@ -37,6 +39,7 @@ const ArtistDetail = () => {
   }, [userId]);
 
   const [songs, setSongs] = useState<Song[]>([]);
+  const [albums, setAlbums] = useState<Album[]>([]);
 
   useEffect(() => {
     const fetchSongs = async () => {
@@ -54,6 +57,25 @@ const ArtistDetail = () => {
 
     if (userId) {
       fetchSongs();
+    }
+  }, [userId]);
+
+  useEffect(() => {
+    const fetchAlbum = async () => {
+      try {
+        const albums = await getAlbumByUserId(userId as string);
+        if (albums) {
+          setAlbums(albums);
+        } else {
+          console.error('No album found for this user');
+        }
+      } catch (error) {
+        console.error('Error calling getSongByUserId:', error);
+      }
+    };
+
+    if (userId) {
+      fetchAlbum();
     }
   }, [userId]);
 
@@ -124,6 +146,12 @@ const ArtistDetail = () => {
                     Your Uploaded Song
                   </h1>
                   <ArtistContent songs={songs} isEdit={true} userId={userId} />
+                </div>
+                <div className="">
+                  <h1 className="text-2xl font-bold mx-4">
+                    Your Uploaded Album
+                  </h1>
+                  <ArtistContent songs={albums} isEdit={true} userId={userId} />
                 </div>
               </>
             );

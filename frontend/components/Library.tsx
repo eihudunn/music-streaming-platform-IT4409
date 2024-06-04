@@ -126,9 +126,9 @@ const Library: React.FC<LibraryProps> = ({ data }) => {
           }}
           classes={{ paper: classes.Menu }}
         >
-          <MenuItem onClick={handleClose} className={classes.menuItem}>
+          {/* <MenuItem onClick={handleClose} className={classes.menuItem}>
             <RiPlayListAddLine className="mr-2" /> Create a new playlist
-          </MenuItem>
+          </MenuItem> */}
           <MenuItem onClick={handleUpload} className={classes.menuItem}>
             <IoMdAdd className="mr-2" /> Upload new song
           </MenuItem>
