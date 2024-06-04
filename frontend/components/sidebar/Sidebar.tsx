@@ -71,15 +71,24 @@ const Sidebar: React.FC<SidebarProp> = ({ children }) => {
 
   const [sidebarWidth, setSidebarWidth] = useState(400); // initial sidebar width
   const resizerRef = useRef(null);
+  const [isHoveredResizeBar, setIsHoveredResizeBar] = useState(false);
+
+  const handleMouseEnter = () => {
+    setIsHoveredResizeBar(true);
+  };
+
+  const handleMouseLeave = () => {
+    setIsHoveredResizeBar(false);
+  };
 
   useEffect(() => {
-    let resizer = resizerRef.current;
+    const resizer = resizerRef.current;
 
-    function initResizerFn(resizer) {
+    function initResizerFn(resizer: HTMLElement | null) {
       // track current mouse position in x var
       let x: number, w: number;
 
-      function rs_mousedownHandler(e) {
+      function rs_mousedownHandler(e: MouseEvent) {
         e.preventDefault();
         x = e.clientX;
 
@@ -87,23 +96,30 @@ const Sidebar: React.FC<SidebarProp> = ({ children }) => {
 
         document.addEventListener('mousemove', rs_mousemoveHandler);
         document.addEventListener('mouseup', rs_mouseupHandler);
+        handleMouseEnter();
       }
 
-      function rs_mousemoveHandler(e) {
+      function rs_mousemoveHandler(e: MouseEvent) {
         e.preventDefault();
         const dx = e.clientX - x;
 
-        const cw = w + dx; // complete width
+        let cw = w + dx; // complete width
 
-        if (cw < 1500 && cw > 300) {
-          setSidebarWidth(cw);
-        }
+        if (cw > 1600 ) {
+          cw = 1600;
+        } else if (cw < 300) {
+          cw = 300;
+        } 
+
+        setSidebarWidth(cw);
+
       }
 
       function rs_mouseupHandler() {
         // remove event mousemove && mouseup
         document.removeEventListener('mouseup', rs_mouseupHandler);
         document.removeEventListener('mousemove', rs_mousemoveHandler);
+        handleMouseLeave();
       }
 
       if (resizer) {
@@ -161,9 +177,17 @@ const Sidebar: React.FC<SidebarProp> = ({ children }) => {
       </div>
       <div
         ref={resizerRef}
-        className="resizer hidden md:flex w-[2px] mx-1 cursor-grab h-full hover:bg-[#727272]"
-      ></div>
-      <main className="h-full flex-1 overflow-y-auto py-2 rounded-lg">
+        // className="resizer hidden md:flex w-[1px] mx-1 cursor-grab h-full hover:bg-[#727272]"
+        className="resizer hidden md:flex w-2 py-2 cursor-grab h-full items-center justify-center opacity-0 hover:opacity-100 active:opacity-100"
+      >
+        <div 
+        className="w-[1px] h-[calc(100%-16px)] bg-white  "
+        style={{ 
+          opacity: isHoveredResizeBar ? 1 : 0.5,
+        }}
+        ></div>
+      </div>
+      <main className="h-full flex-1 overflow-y-auto py-2 pr-2 rounded-lg">
         {children}
       </main>
     </div>

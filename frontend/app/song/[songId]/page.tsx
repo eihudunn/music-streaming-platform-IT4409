@@ -31,7 +31,9 @@ const SongDetail = () => {
   }, [songId]);
 
   return (
-    <div className="flex-grow h-screen rounded-lg">
+    <div 
+    className="flex-grow h-full rounded-lg bg-neutral-900 w-full scrollbar-webkit overflow-y-auto"
+    >
       {data && (
         <Palette
           src={data?.img as string}
