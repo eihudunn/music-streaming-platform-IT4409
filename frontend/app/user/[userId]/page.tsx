@@ -14,14 +14,14 @@ import getSongByUserId from '@/actions/song/getSongByUserId';
 import { Song } from '@/scheme/Song';
 
 const ArtistDetail = () => {
-  const params = useParams<{ artistId: string }>();
-  const artistId = params?.artistId;
+  const params = useParams<{ userId: string }>();
+  const userId = params?.userId;
   const [data, setData] = useState<UserDto | null>(null);
 
   useEffect(() => {
     const getUser = async () => {
       try {
-        const user = await getUserById(artistId as string);
+        const user = await getUserById(userId as string);
         if (user) {
           setData(user);
         } else {
@@ -31,17 +31,17 @@ const ArtistDetail = () => {
         console.error('Error calling getUserById:', error);
       }
     };
-    if (artistId) {
+    if (userId) {
       getUser();
     }
-  }, [artistId]);
+  }, [userId]);
 
   const [songs, setSongs] = useState<Song[]>([]);
 
   useEffect(() => {
     const fetchSongs = async () => {
       try {
-        const songs = await getSongByUserId(artistId as string);
+        const songs = await getSongByUserId(userId as string);
         if (songs) {
           setSongs(songs);
         } else {
@@ -52,10 +52,10 @@ const ArtistDetail = () => {
       }
     };
 
-    if (artistId) {
+    if (userId) {
       fetchSongs();
     }
-  }, [artistId]);
+  }, [userId]);
 
   return (
     <>
@@ -115,12 +115,14 @@ const ArtistDetail = () => {
                 </Header>
                 <PageBreak
                   type={LibraryType.Artist}
-                  id={artistId}
+                  id={userId}
                   songs={songs}
                 />
                 <div className="">
-                  <h1 className="text-2xl font-bold mx-4">Popular</h1>
-                  <ArtistContent songs={songs} limit={5} />
+                  <h1 className="text-2xl font-bold mx-4">
+                    Your Uploaded Song
+                  </h1>
+                  <ArtistContent songs={songs} isEdit={true} userId={userId} />
                 </div>
               </>
             );

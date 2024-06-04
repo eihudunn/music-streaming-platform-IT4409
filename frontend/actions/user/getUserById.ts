@@ -9,6 +9,26 @@ const getUserById = async (id: string): Promise<UserDto | null> => {
     const data = res.data[0];
     data.id = data._id;
     data.type = LibraryType.Artist;
+    data.artistFollowed?.map((item: any) => {
+      item.id = item._id;
+      item.type = LibraryType.Artist;
+      return item;
+    });
+    data.albumsFollowed?.map((item: any) => {
+      item.id = item._id;
+      item.type = LibraryType.Album;
+      return item;
+    });
+    data.playlists?.map((item: any) => {
+      item.id = item._id;
+      item.type = LibraryType.Playlist;
+      return item;
+    });
+    data.likedTracks?.map((item: any) => {
+      item.id = item._id;
+      item.type = LibraryType.Song;
+      return item;
+    });
     console.log(data);
     return data || null;
   } catch (error) {

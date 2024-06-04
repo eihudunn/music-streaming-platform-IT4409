@@ -21,7 +21,7 @@ cloudinary.config({
 
 const getTracks = async (req, res) => {
   try {
-    const tracks = await Track.find().sort({ createAt: -1 });
+    const tracks = await Track.find().sort({ createdAt: -1 });
     res.json(tracks);
   } catch (error) {
     res.status(500).json({ message: error.message });

@@ -28,7 +28,22 @@ const LoginComponent = () => {
     }
   });
   const handleLogin = async () => {
-    console.log(data);
+    const { email, password } = data;
+
+    // Check if all fields are filled
+    if (!email || !password) {
+      toast.error('Please fill in all fields');
+      return;
+    }
+
+    // Check if email is valid
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      toast.error('Please enter a valid email');
+      return;
+    }
+
+    // If all checks pass, make the API call
     signIn('credentials', {
       redirect: false,
       ...data,
@@ -52,7 +67,7 @@ const LoginComponent = () => {
   return (
     <>
       <Head>
-        <title>Login - Spotify</title>
+        <title>Login - Hustify</title>
       </Head>
       <div className="w-screen h-screen flex flex-col items-center">
         <div className="logoRegion p-7 bg-black flex w-full">
@@ -65,7 +80,7 @@ const LoginComponent = () => {
             <div className="flex flex-col items-center justify-center">
               <div className="font-bold text-white text-4xl tracking-tighter my-12">
                 {' '}
-                Log in to Spotify{' '}
+                Log in to Hustify{' '}
               </div>
               <div className="w-full items-center justify-center flex flex-col">
                 <GoogleLogin />
