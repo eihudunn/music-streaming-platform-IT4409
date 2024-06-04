@@ -152,7 +152,7 @@ const PlayerContent: React.FC<PlayerContentProps> = ({ song, songUrl }) => {
           <ConfigButton>
             <Microphone className="pl-2" />
           </ConfigButton>
-          <ConfigButton>
+          <ConfigButton active={isPlaying}>
             <WaitList className="pl-2" />
           </ConfigButton>
           <ConfigButton>

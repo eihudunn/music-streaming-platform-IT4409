@@ -4,14 +4,18 @@ import React, { useState } from 'react';
 
 interface ConfigButtonProp {
   children: React.ReactNode;
+  active?: boolean;
 }
 
-const ConfigButton: React.FC<ConfigButtonProp> = ({ children }) => {
+const ConfigButton: React.FC<ConfigButtonProp> = ({ children, active }) => {
   const [isActive, setIsActive] = useState(false);
 
   const handleClick = () => {
     setIsActive(!isActive);
   };
+
+  const IsActive = active || isActive;
+
 
   return (
     <button
@@ -29,11 +33,11 @@ const ConfigButton: React.FC<ConfigButtonProp> = ({ children }) => {
       items-center
       justify-center
       "
-      style={{ color: isActive ? '#1db954': 'white', opacity: isActive ? 1 : 0.7 }}
+      style={{ color: IsActive ? '#1db954': 'white', opacity: IsActive ? 1 : 0.7 }}
       onClick={handleClick}
     >
       {children}
-      {isActive && (
+      {IsActive && (
             <span 
             className="
             transform 
