@@ -1,24 +1,14 @@
-import axiosClient from "@/app/_utils/GlobalApi";
-import { LibraryType } from "@/const/libraryType";
-import { Playlist } from "@/scheme/Playlist";
+import axiosClient from '@/app/_utils/GlobalApi';
+import Notification from '@/scheme/Notification';
 
-const getPlaylistById = async (id: string): Promise<Playlist | null> => {
+const getNotification = async (id: string): Promise<Notification[]> => {
   try {
-    const res = await axiosClient.get(`/playlist/${id}`);
-    const data = res.data[0];
-    data.id = data._id;
-    data.type = LibraryType.Playlist;
-    data.tracks = data.tracks.map((track: any) => {
-      track.id = track._id;
-      delete track._id;
-      return track;
-    });
-    delete data._id;
+    const { data } = await axiosClient.get(`/user/notify/${id}`);
     return data || null;
   } catch (error) {
     console.log(error);
-    return null;
+    return [];
   }
 };
 
-export default getPlaylistById;
+export default getNotification;

@@ -4,9 +4,20 @@ import axios from 'axios';
 import { NextResponse } from 'next/server';
 
 export async function POST(request) {
-  const { name, email, password } = await request.json();
+  const { name, email, password, picture, image } = await request.json();
   await connectMongoDB();
-  const user = await User.create({ username: name, email, password });
+  const user = await User.create({
+    username: name,
+    email,
+    password,
+    avatarImg: picture ? picture : image,
+    searchTitle: name.toLowerCase(),
+    following: [],
+    artistFollowed: [],
+    playlists: [],
+    albumsFollowed: [],
+    preferedGenre: [],
+  });
   const userResponse = {
     id: user._id,
     username: user.username,

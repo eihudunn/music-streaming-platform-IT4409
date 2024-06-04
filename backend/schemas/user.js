@@ -1,58 +1,71 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
-const UserSchema = mongoose.Schema({
+const UserSchema = mongoose.Schema(
+  {
     username: {
-        type: String,
-        unique: true,
-        required: true,
+      type: String,
+      unique: true,
+      required: true,
     },
     avatarImg: {
-        type: String,
-        default: 'https://upload.wikimedia.org/wikipedia/commons/a/af/Default_avatar_profile.jpg'
+      type: String,
+      default:
+        "https://upload.wikimedia.org/wikipedia/commons/a/af/Default_avatar_profile.jpg",
     },
     email: {
-        type: String,
-        unique: true,
-        required: true,
+      type: String,
+      unique: true,
+      required: true,
     },
     searchTitle: {
-        type: String,
+      type: String,
     },
     password: {
-        type: String,
-        required: true,
+      type: String,
     },
-    following: [{
+    following: [
+      {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'User'
-    }],
-    artistFollowed: [{
+        ref: "User",
+      },
+    ],
+    artistFollowed: [
+      {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'User'
-    }],
-    playlists: [{
+        ref: "User",
+      },
+    ],
+    playlists: [
+      {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Playlist'
-    }],
-    albumsFollowed: [{
+        ref: "Playlist",
+      },
+    ],
+    albumsFollowed: [
+      {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Album'
-    }],
-    likedTracks: [{
+        ref: "Album",
+      },
+    ],
+    likedTracks: [
+      {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Track'
-    }], 
-    preferedGenre: [{
+        ref: "Track",
+      },
+    ],
+    preferedGenre: [
+      {
         genre: {
-            type: String,
-            required: true
+          type: String,
         },
         weight: {
-            type: Number,
-            required: true
-        }
-    }]
-}, {timestamps: true});
+          type: Number,
+        },
+      },
+    ],
+  },
+  { timestamps: true }
+);
 
-const User = mongoose.model('User', UserSchema);  
+const User = mongoose.model("User", UserSchema);
 module.exports = User;

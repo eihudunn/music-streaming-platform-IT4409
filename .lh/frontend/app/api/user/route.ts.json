@@ -1,0 +1,26 @@
+{
+    "sourceFile": "frontend/app/api/user/route.ts",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 2,
+            "patches": [
+                {
+                    "date": 1717461282310,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                },
+                {
+                    "date": 1717461289428,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -10,9 +10,9 @@\n     username: name,\r\n     email,\r\n     password,\r\n     avatarImg: picture ? picture : image,\r\n-    searchTitle: u\r\n+    searchTitle: ú\r\n     following: [],\r\n     artistFollowed: [],\r\n     playlists: [],\r\n     albumsFollowed: [],\r\n"
+                },
+                {
+                    "date": 1717461333495,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -0,0 +1,31 @@\n+import { connectMongoDB } from '@/lib/mongodb';\r\n+import User from '@/scheme/User';\r\n+import axios from 'axios';\r\n+import { NextResponse } from 'next/server';\r\n+\r\n+export async function POST(request) {\r\n+  const { name, email, password, picture, image } = await request.json();\r\n+  await connectMongoDB();\r\n+  const user = await User.create({\r\n+    username: name,\r\n+    email,\r\n+    password,\r\n+    avatarImg: picture ? picture : image,\r\n+    searchTitle: name.toLowerCaseNon(),\r\n+    following: [],\r\n+    artistFollowed: [],\r\n+    playlists: [],\r\n+    albumsFollowed: [],\r\n+    preferedGenre: [],\r\n+  });\r\n+  const userResponse = {\r\n+    id: user._id,\r\n+    username: user.username,\r\n+    email: user.email,\r\n+    // Add any other properties that you want to send back\r\n+  };\r\n+  return NextResponse.json(\r\n+    { message: 'User Registered Successfully', user: userResponse },\r\n+    { status: 201 },\r\n+  );\r\n+}\r\n"
+                }
+            ],
+            "date": 1717461282310,
+            "name": "Commit-0",
+            "content": "import { connectMongoDB } from '@/lib/mongodb';\r\nimport User from '@/scheme/User';\r\nimport axios from 'axios';\r\nimport { NextResponse } from 'next/server';\r\n\r\nexport async function POST(request) {\r\n  const { name, email, password, picture, image } = await request.json();\r\n  await connectMongoDB();\r\n  const user = await User.create({\r\n    username: name,\r\n    email,\r\n    password,\r\n    avatarImg: picture ? picture : image,\r\n    searcg\r\n    following: [],\r\n    artistFollowed: [],\r\n    playlists: [],\r\n    albumsFollowed: [],\r\n    preferedGenre: [],\r\n  });\r\n  const userResponse = {\r\n    id: user._id,\r\n    username: user.username,\r\n    email: user.email,\r\n    // Add any other properties that you want to send back\r\n  };\r\n  return NextResponse.json(\r\n    { message: 'User Registered Successfully', user: userResponse },\r\n    { status: 201 },\r\n  );\r\n}\r\n"
+        }
+    ]
+}

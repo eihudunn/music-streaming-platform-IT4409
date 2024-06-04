@@ -1,0 +1,22 @@
+{
+    "sourceFile": "frontend/components/ArtistContent.tsx",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 1,
+            "patches": [
+                {
+                    "date": 1717458807135,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                },
+                {
+                    "date": 1717459013644,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -21,9 +21,9 @@\n   if (songs?.length === 0) {\r\n     return (\r\n       <div className=\"flex flex-col gap-2-y 2-full px-6 text-neutral-400\">\r\n         No song yet\r\n-      </div>a\r\n+      </div>\r\n     );\r\n   }\r\n \r\n   return (\r\n"
+                }
+            ],
+            "date": 1717458807135,
+            "name": "Commit-0",
+            "content": "'use client';\r\n\r\nimport LikeButton from '@/components/musicBar/LikeButton';\r\nimport MediaItem from '@/components/MediaItem';\r\nimport useOnPlay from '@/hooks/useOnPlay';\r\nimport { Song } from '@/scheme/Song';\r\nimport { useRouter } from 'next/navigation';\r\nimport React from 'react';\r\nimport PlayButton from '@/components/PlayButton';\r\n\r\ninterface ArtistContentProps {\r\n  songs: Song[];\r\n}\r\n\r\nconst ArtistContent: React.FC<ArtistContentProps> = ({ songs }) => {\r\n  const onPlay = useOnPlay(songs);\r\n  //useUser hook\r\n\r\n  //check is logged\r\n\r\n  if (songs?.length === 0) {\r\n    return (\r\n      <div className=\"flex flex-col gap-2-y 2-full px-6 text-neutral-400\">\r\n        No song yet\r\n      </div>a\r\n    );\r\n  }\r\n\r\n  return (\r\n    <div className=\"relative flex flex-col gap-y-2 w-full p-6\">\r\n      {songs\r\n        ?.sort((a, b) => (b?.plays ?? 0) - (a?.plays ?? 0))\r\n        .map((song, index) => {\r\n          return (\r\n            <div\r\n              key={song.id}\r\n              className=\"flex group items-center gap-x-4 w-full\"\r\n            >\r\n              <p>{index + 1}</p>\r\n              <div className=\"flex-1\">\r\n                <MediaItem\r\n                  onClick={() => onPlay(song?.id)}\r\n                  data={song}\r\n                  isNotLibrary={true}\r\n                />\r\n              </div>\r\n              <LikeButton songId={song.id} />\r\n              <PlayButton id={song.id} onClick={(id: string) => onPlay(id)} />\r\n            </div>\r\n          );\r\n        })}\r\n    </div>\r\n  );\r\n};\r\n\r\nexport default ArtistContent;\r\n"
+        }
+    ]
+}

@@ -21,7 +21,7 @@ cloudinary.config({
 
 const getTracks = async (req, res) => {
   try {
-    const tracks = await Track.find();
+    const tracks = await Track.find().sort({ createAt: -1 });
     res.json(tracks);
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -279,7 +279,7 @@ const trackSuggestion = async (req, res) => {
       let favouriteGenreTracks = [];
       for (let i = 0; i < favouriteGenre.length; i++) {
         const genreTracks = await Track.find({
-          genre: favouriteGenre[i].genre.toString(),
+          genre: favouriteGenre[i].genre?.toString(),
           createdAt: {
             $gte: oneWeekAgo,
           },
@@ -313,7 +313,7 @@ const playTrack = async (req, res) => {
     const user = await User.findById(userId);
     let genreExists = false;
     user.preferedGenre = user.preferedGenre.map((g) => {
-      if (g.genre.toString() === track.genre.toString()) {
+      if (g.genre?.toString() === track.genre?.toString()) {
         g.weight++;
         genreExists = true;
       }
@@ -332,7 +332,7 @@ const playTrack = async (req, res) => {
       track.plays === 1000000
     ) {
       const artist = await User.findById(track.userId);
-      let contentTitle = `CCongratulation, your track: ${track.title} have been listened for ${track.plays} times!`;
+      let contentTitle = `Congratulation, your track: ${track.title} have been listened for ${track.plays} times!`;
       let notify = new Notification({
         userId: track.userId.toString(),
         content: contentTitle,
@@ -362,10 +362,10 @@ const likeTracks = async (req, res) => {
     if (!track) {
       return res.status(404).json({ message: "Track not found" });
     }
-    if (!user.likedTracks.includes(track._id.toString())) {
+    if (!user.likedTracks.includes(track._id?.toString())) {
       let genreExists = false;
       user.preferedGenre = user.preferedGenre.map((g) => {
-        if (g.genre.toString() === track.genre.toString()) {
+        if (g.genre?.toString() === track.genre?.toString()) {
           g.weight += 10;
         }
         return g;
@@ -434,6 +434,28 @@ const unlikeTracks = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
+
+const isTrackLiked = async (req, res) => {
+  try {
+    let user = await User.findById(req.body.userId);
+    let track = await Track.findById(req.body.trackId);
+    let like = req.body.like;
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+    if (!track) {
+      return res.status(404).json({ message: "Track not found" });
+    }
+    if (!user.likedTracks.includes(track._id.toString())) {
+      res.json({ isLiked: false });
+    } else {
+      res.json({ isLiked: true });
+    }
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
 module.exports = {
   getTracks,
   getTracksById,
@@ -445,4 +467,5 @@ module.exports = {
   playTrack,
   likeTracks,
   unlikeTracks,
+  isTrackLiked,
 };

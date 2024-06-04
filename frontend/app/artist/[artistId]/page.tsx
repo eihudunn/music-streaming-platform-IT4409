@@ -5,10 +5,13 @@ import Header from '@/components/Header';
 import Image from 'next/image';
 import { useParams } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
-import LikedContent from '@/app/liked/components/LikedContent';
 import PageBreak from '@/components/PageBreak';
 import { UserDto } from '@/scheme/User';
 import getUserById from '@/actions/user/getUserById';
+import { LibraryType } from '@/const/libraryType';
+import ArtistContent from '@/components/ArtistContent';
+import getSongByUserId from '@/actions/song/getSongByUserId';
+import { Song } from '@/scheme/Song';
 
 const ArtistDetail = () => {
   const params = useParams<{ artistId: string }>();
@@ -30,6 +33,27 @@ const ArtistDetail = () => {
     };
     if (artistId) {
       getUser();
+    }
+  }, [artistId]);
+
+  const [songs, setSongs] = useState<Song[]>([]);
+
+  useEffect(() => {
+    const fetchSongs = async () => {
+      try {
+        const songs = await getSongByUserId(artistId as string);
+        if (songs) {
+          setSongs(songs);
+        } else {
+          console.error('No songs found for this user');
+        }
+      } catch (error) {
+        console.error('Error calling getSongByUserId:', error);
+      }
+    };
+
+    if (artistId) {
+      fetchSongs();
     }
   }, [artistId]);
 
@@ -66,7 +90,11 @@ const ArtistDetail = () => {
                         <Image
                           fill
                           sizes="240"
-                          src={data?.avatarImg as string}
+                          src={
+                            data?.avatarImg
+                              ? (data?.avatarImg as string)
+                              : '/images/default.png'
+                          }
                           alt={data?.username as string}
                           className="object-cover"
                         />
@@ -79,20 +107,21 @@ const ArtistDetail = () => {
                           {data?.username}
                         </h1>
                         <div className="flex items-center gap-x-2">
-                          <p className="text-white">100 monthly listener</p>
+                          <p className="text-white"></p>
                         </div>
                       </div>
                     </div>
                   </div>
                 </Header>
-                {/* <PageBreak
-                  songs={data?.tracks as Song[]}
-                  style={{
-                    backgroundColor: `${color}`,
-                    mixBlendMode: 'overlay',
-                  }}
+                <PageBreak
+                  type={LibraryType.Artist}
+                  id={artistId}
+                  songs={songs}
                 />
-                <LikedContent songs={data?.tracks as Song[]} /> */}
+                <div className="">
+                  <h1 className="text-2xl font-bold mx-4">Popular</h1>
+                  <ArtistContent songs={songs} />
+                </div>
               </>
             );
           }}

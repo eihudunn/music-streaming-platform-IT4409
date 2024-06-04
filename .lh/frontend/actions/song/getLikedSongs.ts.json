@@ -1,0 +1,46 @@
+{
+    "sourceFile": "frontend/actions/song/getLikedSongs.ts",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 7,
+            "patches": [
+                {
+                    "date": 1717456717121,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                },
+                {
+                    "date": 1717456774390,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -0,0 +1,19 @@\n+import axiosClient from \"@/app/_utils/GlobalApi\";\r\n+\r\n+const getSongByUserId = async (id: string): Promise<Song[] | null> => {\r\n+  try {\r\n+    const { data } = await axiosClient.get(`/song/get/user/${id}`);\r\n+    const res = data.map((song: any) => {\r\n+      song.id = song._id;\r\n+      song.type = LibraryType.Song;\r\n+      delete song._id;\r\n+      return song;\r\n+    });\r\n+    return res || [];\r\n+  } catch (error) {\r\n+    console.log(error);\r\n+    return null;\r\n+  }\r\n+};\r\n+\r\n+export default getSongByUserId;\r\n"
+                },
+                {
+                    "date": 1717456782163,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -0,0 +1,19 @@\n+import axiosClient from \"@/app/_utils/GlobalApi\";\r\n+\r\n+const getLikedSong = async (id: string): Promise<Song[] | null> => {\r\n+  try {\r\n+    const { data } = await axiosClient.get(`/song/get/user/${id}`);\r\n+    const res = data.map((song: any) => {\r\n+      song.id = song._id;\r\n+      song.type = LibraryType.Song;\r\n+      delete song._id;\r\n+      return song;\r\n+    });\r\n+    return res || [];\r\n+  } catch (error) {\r\n+    console.log(error);\r\n+    return null;\r\n+  }\r\n+};\r\n+\r\n+export default getSongByUserId;\r\n"
+                },
+                {
+                    "date": 1717456787657,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -0,0 +1,19 @@\n+import axiosClient from \"@/app/_utils/GlobalApi\";\r\n+\r\n+const getLikedSongs = async (id: string): Promise<Song[] | null> => {\r\n+  try {\r\n+    const { data } = await axiosClient.get(`/song/get/user/${id}`);\r\n+    const res = data.map((song: any) => {\r\n+      song.id = song._id;\r\n+      song.type = LibraryType.Song;\r\n+      delete song._id;\r\n+      return song;\r\n+    });\r\n+    return res || [];\r\n+  } catch (error) {\r\n+    console.log(error);\r\n+    return null;\r\n+  }\r\n+};\r\n+\r\n+export default getSongByUserId;\r\n"
+                },
+                {
+                    "date": 1717456795398,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -0,0 +1,21 @@\n+import axiosClient from \"@/app/_utils/GlobalApi\";\r\n+import { Song } from \"@/scheme/Song\";\r\n+\r\n+const getLikedSongs = async (id: string): Promise<Song[] | null> => {\r\n+  try {\r\n+    const { data } = await axiosClient.get(`/song/get/user/${id}`);\r\n+    const res = data.map((song: any) => {\r\n+      song.id = song._id;\r\n+      song.type = LibraryType.Song;\r\n+      delete song._id;\r\n+      return song;\r\n+    });\r\n+    return res || [];\r\n+  } catch (error) {\r\n+    console.log(error);\r\n+    return null;\r\n+  }\r\n+};\r\n+\r\n+export default const getLikedSongs = async (id: string): Promise<Song[] | null> => {\r\n+    ;\r\n"
+                },
+                {
+                    "date": 1717456802489,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -0,0 +1,21 @@\n+import axiosClient from \"@/app/_utils/GlobalApi\";\r\n+import { Song } from \"@/scheme/Song\";\r\n+\r\n+const getLikedSongs = async (id: string): Promise<Song[] | null> => {\r\n+  try {\r\n+    const { data } = await axiosClient.get(`/user/get/liked/${id}`);\r\n+    const res = data.map((song: any) => {\r\n+      song.id = song._id;\r\n+      song.type = LibraryType.Song;\r\n+      delete song._id;\r\n+      return song;\r\n+    });\r\n+    return res || [];\r\n+  } catch (error) {\r\n+    console.log(error);\r\n+    return null;\r\n+  }\r\n+};\r\n+\r\n+export default const getLikedSongs = async (id: string): Promise<Song[] | null> => {\r\n+    ;\r\n"
+                },
+                {
+                    "date": 1717456850715,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -0,0 +1,22 @@\n+import axiosClient from \"@/app/_utils/GlobalApi\";\r\n+import { LibraryType } from \"@/const/libraryType\";\r\n+import { Song } from \"@/scheme/Song\";\r\n+\r\n+const getLikedSongs = async (id: string): Promise<Song[] | null> => {\r\n+  try {\r\n+    const { data } = await axiosClient.get(`/user/get/liked/${id}`);\r\n+    const res = data.map((song: any) => {\r\n+      song.id = song._id;\r\n+      song.type = LibraryType.Song;\r\n+      delete song._id;\r\n+      return song;\r\n+    });\r\n+    return res || [];\r\n+  } catch (error) {\r\n+    console.log(error);\r\n+    return null;\r\n+  }\r\n+};\r\n+\r\n+export default const getLikedSongs = async (id: string): Promise<Song[] | null> => {\r\n+    ;\r\n"
+                },
+                {
+                    "date": 1717456855926,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -17,6 +17,6 @@\n     return null;\r\n   }\r\n };\r\n \r\n-export default getLikedSongs\r\n+export default getLikedSongs;\r\n     ;\r\n"
+                }
+            ],
+            "date": 1717456717121,
+            "name": "Commit-0",
+            "content": "import axiosClient from \"@/app/_utils/GlobalApi\";\r\nimport Library from \"@/components/Library\";\r\nimport { LibraryType } from \"@/const/libraryType\";\r\nimport { Song } from \"@/scheme/Song\";\r\n\r\nconst getSongByUserId = async (id: string): Promise<Song[] | null> => {\r\n  try {\r\n    const { data } = await axiosClient.get(`/song/get/user/${id}`);\r\n    const res = data.map((song: any) => {\r\n      song.id = song._id;\r\n      song.type = LibraryType.Song;\r\n      delete song._id;\r\n      return song;\r\n    });\r\n    return res || [];\r\n  } catch (error) {\r\n    console.log(error);\r\n    return null;\r\n  }\r\n};\r\n\r\nexport default getSongByUserId;\r\n"
+        }
+    ]
+}

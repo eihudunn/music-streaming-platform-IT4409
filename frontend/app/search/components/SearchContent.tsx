@@ -5,35 +5,45 @@ import MediaItem from '@/components/MediaItem';
 import useOnPlay from '@/hooks/useOnPlay';
 import { Song } from '@/scheme/Song';
 import React from 'react';
+import { useRouter } from 'next/navigation';
 
 interface SearchContentProps {
-  songs: Song[];
+  data: any;
 }
 
-const SearchContent: React.FC<SearchContentProps> = ({ songs }) => {
-  const onPlay = useOnPlay(songs);
+const SearchContent: React.FC<SearchContentProps> = ({ data }) => {
+  const router = useRouter();
 
-  if (songs.length === 0) {
+  const onDetailClick = (data: any) => {
+    console.log(data);
+    router.push(`/${data.type.toLowerCase()}/${data.id}`);
+  };
+
+  if (data?.length === 0) {
     return (
       <>
-        <div className="flex flex-col gap-y-2 w-full px-6 text-neutral-400">
-          No songs found.
-        </div>
-        <div>
-          Please make sure your words are spelled correctly, or use fewer or
-          different keywords.
+        <div className="flex flex-col gap-y-2 w-full px-6 text-neutral-400 items-center justify-center">
+          <p>No data found.</p>
+          <p>
+            Please make sure your words are spelled correctly, or use fewer or
+            different keywords.
+          </p>
         </div>
       </>
     );
   }
   return (
     <div className="flex flex-col gap-y-2 w-full px-6">
-      {songs.map((song) => (
-        <div key={song.id} className="flex items-center gap-x-4 w-full">
+      {data?.map((datum: any) => (
+        <div key={data.id} className="flex items-center gap-x-4 w-full">
           <div className="flex-1">
-            <MediaItem onClick={(id: string) => onPlay(id)} data={song} />
+            <MediaItem
+              onClick={() => onDetailClick(datum)}
+              key={datum.id}
+              data={datum}
+            />
           </div>
-          <LikeButton songId={song.id} />
+          {/* <LikeButton songId={data.id} /> */}
         </div>
       ))}
     </div>

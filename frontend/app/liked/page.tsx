@@ -1,18 +1,32 @@
-import fakeGetSong from '@/actions/api/getSong';
+'use client';
+
 import Header from '@/components/Header';
 import Image from 'next/image';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import LikedContent from './components/LikedContent';
+import getLikedSongs from '@/actions/song/getLikedSongs';
+import { useSession } from 'next-auth/react';
+import { Song } from '@/scheme/Song';
 
-export const revalidate = 0;
+const Liked = () => {
+  const { data: session } = useSession();
+  const [songs, setSongs] = useState<Song[]>([] as Song[]);
 
-const Liked = async () => {
-  //add song:
-  //const songs = await ... liked
-  const songs = fakeGetSong();
+  useEffect(() => {
+    const fetchSongs = async () => {
+      const songsData = await getLikedSongs(session?.user?._doc._id);
+      setSongs(songsData as Song[]);
+    };
+
+    fetchSongs();
+  }, [session]);
   return (
     <div className="bg-neutral-900 rounded-lg h-full w-full overflow-hidden overflow-y-auto">
-      <Header>
+      <Header
+        style={{
+          backgroundImage: `linear-gradient(to bottom, #50399C var(--tw-gradient-from-position), rgb(16 185 129 / 0) var(--tw-gradient-from-position) )`,
+        }}
+      >
         <div className="mt-20">
           <div className="flex flex-col md:flex-row items-center gap-x-5">
             <div className="relative h-32 w-32 lg:h-44 lg:w-44">
