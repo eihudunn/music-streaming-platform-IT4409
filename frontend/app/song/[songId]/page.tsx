@@ -30,9 +30,7 @@ const SongDetail = () => {
   }, [songId]);
 
   return (
-    <div 
-    className="flex-grow h-full rounded-lg bg-neutral-900 w-full scrollbar-webkit overflow-y-auto"
-    >
+    <div className="flex-grow h-full rounded-lg bg-neutral-900 w-full scrollbar-webkit overflow-y-auto">
       {data && (
         <Palette
           src={data?.img as string}
@@ -77,7 +75,11 @@ const SongDetail = () => {
                         </h1>
                         <div className="flex items-center gap-x-2">
                           <Image
-                            src={data?.artistData?.[0].avatarImg}
+                            src={
+                              data?.artistData
+                                ? data?.artistData?.[0]?.avatarImg
+                                : '/images/default.png'
+                            }
                             alt="avt"
                             className="rounded-full h-8 w-8"
                             width={32}
@@ -87,11 +89,11 @@ const SongDetail = () => {
                             className="text-white"
                             onClick={() =>
                               router.push(
-                                `/artist/${data?.artistData?.[0]._id}`,
+                                `/artist/${data?.artistData?.[0]?._id}`,
                               )
                             }
                           >
-                            {data?.artistData?.[0].username}
+                            {data?.artistData?.[0]?.username}
                           </p>
                         </div>
                       </div>

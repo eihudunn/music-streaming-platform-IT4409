@@ -13,6 +13,7 @@ interface PageBreakProps {
   song?: Song;
   id?: string;
   type?: string;
+  isProfile?: boolean;
 }
 
 const PageBreak: React.FC<PageBreakProps> = ({
@@ -21,6 +22,7 @@ const PageBreak: React.FC<PageBreakProps> = ({
   song,
   type,
   id,
+  isProfile,
 }) => {
   const onPlay = useOnPlay(songs ? (songs as Song[]) : [song as Song]);
 
@@ -57,9 +59,11 @@ const PageBreak: React.FC<PageBreakProps> = ({
             onClick={(id: string) => onPlay(id)}
             isNotHidden={true}
           />
-          <div className="h-20 w-20 ml-2 text-gray-500 cursor-pointer flex items-center justify-center">
-            <FollowButton id={id as string} type={LibraryType.Artist} />
-          </div>
+          {!isProfile && (
+            <div className="h-20 w-20 ml-2 text-gray-500 cursor-pointer flex items-center justify-center">
+              <FollowButton id={id as string} type={LibraryType.Artist} />
+            </div>
+          )}
           <div className="h-20 w-20 cursor-pointer flex items-center justify-center">
             <BsThreeDots size={30} />
           </div>

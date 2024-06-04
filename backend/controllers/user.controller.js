@@ -226,9 +226,9 @@ const followArtist = async (req, res) => {
     }
     artist.save();
     if (
-      artist.following.length == 1000 ||
-      artist.following.length == 10000 ||
-      artist.following.length == 100000
+      artist.following.length == 1 ||
+      artist.following.length == 2 ||
+      artist.following.length == 3
     ) {
       let notify = new Notification({
         userId: artist._id,

@@ -105,7 +105,7 @@ export default function Home() {
         {suggestions?.favouriteGenreTracks?.length > 0 && (
           <>
             <div className="flex justify-between items-center">
-              <h1 className="text-white text-2xl font-semibold">
+              <h1 className="text-white text-2xl font-bold mx-2">
                 Suggested for you
               </h1>
             </div>

@@ -76,7 +76,11 @@ const AlbumDetail = () => {
                         </h1>
                         <div className="flex items-center gap-x-2">
                           <Image
-                            src={data?.artistData?.[0].avatarImg}
+                            src={
+                              data?.artistData
+                                ? data?.artistData?.[0]?.avatarImg
+                                : '/images/default.png'
+                            }
                             alt="avt"
                             className="rounded-full h-8 w-8"
                             width={32}

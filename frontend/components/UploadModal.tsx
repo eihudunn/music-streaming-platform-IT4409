@@ -1,6 +1,5 @@
 'use client';
 
-import uniqid from 'uniqid';
 import useUploadModal from '@/hooks/useUploadModal';
 import Modal from './Modal';
 import { FieldValues, SubmitHandler, useForm } from 'react-hook-form';
@@ -110,7 +109,16 @@ const UploadModal = () => {
         </div>
         <div>
           <div className="pb-1">Select a genre</div>
-          <select id="genre" {...register('genre', { required: true })}>
+          <select
+            id="genre"
+            {...register('genre', { required: true })}
+            style={{
+              width: '100%',
+              height: '45px',
+              padding: '5px',
+              borderRadius: '5px',
+            }}
+          >
             {GenreArr.map((genre) => (
               <option key={genre} value={genre}>
                 {genre}

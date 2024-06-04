@@ -117,6 +117,7 @@ const ArtistDetail = () => {
                   type={LibraryType.Artist}
                   id={userId}
                   songs={songs}
+                  isProfile={true}
                 />
                 <div className="">
                   <h1 className="text-2xl font-bold mx-4">

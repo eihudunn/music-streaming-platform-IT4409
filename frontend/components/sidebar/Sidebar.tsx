@@ -12,7 +12,6 @@ import usePlayer from '@/hooks/usePlayer';
 import { twMerge } from 'tailwind-merge';
 import { useSession } from 'next-auth/react';
 import getSongByUserId from '@/actions/song/getSongByUserId';
-import getSongs from '@/actions/song/getSongs';
 import 'react-resizable/css/styles.css';
 import { Playlist } from '@/scheme/Playlist';
 import getPlaylistByUserId from '@/actions/playlist/getPlaylistByUserId';

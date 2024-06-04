@@ -115,14 +115,14 @@ const uploadAlbum = async (req, res) => {
                     " has been uploaded!",
                   type: "New",
                 });
-                if (follower.email) {
+                if (follower?.email) {
                   const contentTitle = `Your artist ${artist.username} has uploaded an album! `;
                   const htmlMail = newAlbumForm(
                     artist.username,
                     req.body.title,
-                    "https://www.google.com"
+                    `http://localhost:3000/album/${album._id}`
                   ); //album.href ở bên frontend
-                  sendMail(follower.email, contentTitle, htmlMail);
+                  sendMail(follower?.email, contentTitle, htmlMail);
                 }
                 return notify.save();
               });
