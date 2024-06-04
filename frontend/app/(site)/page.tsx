@@ -102,7 +102,30 @@ export default function Home() {
             </div>
           </>
         )}
-        
+        {suggestions?.favouriteGenreTracks?.length > 0 && (
+          <>
+            <div className="flex justify-between items-center">
+              <h1 className="text-white text-2xl font-semibold">
+                Suggested for you
+              </h1>
+            </div>
+            {suggestions?.favouriteGenreTracks?.map(
+              (item) =>
+                item.tracks?.length > 0 && (
+                  <>
+                    <div className="flex justify-between items-center">
+                      <h1 className="text-white text-2xl font-semibold">
+                        {item.genre}
+                      </h1>
+                    </div>
+                    <div>
+                      <PageContent songs={item.tracks} />
+                    </div>
+                  </>
+                ),
+            )}
+          </>
+        )}
       </div>
     </div>
   );
