@@ -2,11 +2,10 @@ import NextAuth from 'next-auth/next';
 import GoogleProvider from 'next-auth/providers/google';
 import GithubProvider from 'next-auth/providers/github';
 import CredentialsProvider from 'next-auth/providers/credentials';
-import { connectDB } from '@/app/_utils/database';
-import { signIn } from 'next-auth/react';
 import { connectMongoDB } from '@/lib/mongodb';
 import bcrypt from 'bcrypt';
 import User from '@/scheme/User';
+
 const handler = NextAuth({
   providers: [
     GoogleProvider({
@@ -67,7 +66,7 @@ const handler = NextAuth({
     },
     async signIn({ user, account }) {
       if (account?.provider === 'google' || account?.provider === 'github') {
-        const { name, email } = user;
+        const { name, email, image, picture } = user;
         try {
           await connectMongoDB();
 
@@ -76,7 +75,7 @@ const handler = NextAuth({
           if (!userExists) {
             const res = await fetch('http://localhost:3000/api/user', {
               method: 'POST',
-              body: JSON.stringify({ name, email }),
+              body: JSON.stringify({ name, email, image, picture }),
               headers: {
                 'Content-Type': 'application/json',
               },

@@ -1,12 +1,46 @@
+'use client';
+
 import Header from '@/components/Header';
 import ListItem from '@/components/ListItem';
 import PageContent from './components/PageContent';
 import getSongs from '@/actions/song/getSongs';
+import { useSession } from 'next-auth/react';
+import getSuggestion from '@/actions/song/getSuggestion';
+import { useEffect, useState } from 'react';
+import { Song } from '@/scheme/Song';
 
-export const revalidate = 1;
+export interface SuggestionData {
+  MostPopularTracks: Song[];
+  HotTracks: Song[];
+  artistFollowedTracks: Song[];
+  favouriteGenreTracks: Song[];
+}
 
-export default async function Home() {
-  const songs = await getSongs();
+export default function Home() {
+  const [songs, setSongs] = useState<Song[]>([]);
+  const [suggestions, setSuggestions] = useState<SuggestionData>(
+    {} as SuggestionData,
+  );
+  const { data: session } = useSession();
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const songsData = await getSongs();
+      setSongs(songsData);
+
+      if (session?.user?._doc._id) {
+        const suggestionData = await getSuggestion(session.user._doc._id);
+        setSuggestions(suggestionData);
+      }
+    };
+
+    fetchData();
+  }, [session]);
+
+  console.log('p', suggestions?.MostPopularTracks);
+  console.log('hot', suggestions?.HotTracks);
+  console.log('fl', suggestions?.artistFollowedTracks);
+  console.log('fav', suggestions?.favouriteGenreTracks);
 
   return (
     <div className="bg-neutral-900 rounded-lg h-full w-full overflow-hidden overflow-y-auto">
@@ -34,13 +68,40 @@ export default async function Home() {
         <div>
           <PageContent songs={songs} />
         </div>
-        <div className="break my-20"></div>
-        <div className="flex justify-between items-center">
-          <h1 className="text-white text-2xl font-semibold">Newest Songs</h1>
-        </div>
-        <div>
-          <PageContent songs={songs} />
-        </div>
+        {suggestions?.MostPopularTracks?.length > 0 && (
+          <>
+            <div className="flex justify-between items-center">
+              <h1 className="text-white text-2xl font-semibold">
+                Most popular
+              </h1>
+            </div>
+            <div>
+              <PageContent songs={suggestions?.MostPopularTracks} />
+            </div>
+          </>
+        )}
+        {suggestions?.HotTracks?.length > 0 && (
+          <>
+            <div className="flex justify-between items-center">
+              <h1 className="text-white text-2xl font-semibold">Hot track</h1>
+            </div>
+            <div>
+              <PageContent songs={suggestions?.HotTracks} />
+            </div>
+          </>
+        )}
+        {suggestions?.artistFollowedTracks?.length > 0 && (
+          <>
+            <div className="flex justify-between items-center">
+              <h1 className="text-white text-2xl font-semibold">
+                Artist followed
+              </h1>
+            </div>
+            <div>
+              <PageContent songs={suggestions?.artistFollowedTracks} />
+            </div>
+          </>
+        )}
       </div>
     </div>
   );

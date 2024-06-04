@@ -14,6 +14,9 @@ const {
   getNotify,
   getAllNotify,
   getUserById,
+  checkArtistFollowed,
+  checkAlbumFollowed,
+  getLikedTracksByUserId,
 } = require("../controllers/user.controller");
 
 const storage = multer.diskStorage({
@@ -28,11 +31,14 @@ const upload = multer({ storage });
 
 router.get("/get", getUsers);
 router.get("/get/:id", getUserById);
+router.get("/get/liked/:id", getLikedTracksByUserId);
 router.post("/post", upload.single("img"), postUser);
 router.post("/update/:id", upload.single("img"), updateUser);
 router.delete("/delete/:id", deleteUser);
 router.post("/follow/artist", followArtist);
 router.post("/unfollow/artist", unfollowArtist);
+router.post("/is-followed/artist", checkArtistFollowed);
+router.post("/is-followed/album", checkAlbumFollowed);
 router.post("/follow/album", followAlbum);
 router.post("/unfollow/album", unfollowAlbum);
 router.get("/notify/:id", getNotify);

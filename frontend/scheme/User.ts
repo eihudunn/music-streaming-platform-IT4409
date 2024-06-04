@@ -4,12 +4,20 @@ const UserSchema = new Schema(
   {
     username: {
       type: String,
+      unique: true,
+      required: true,
+    },
+    avatarImg: {
+      type: String,
+      default:
+        'https://upload.wikimedia.org/wikipedia/commons/a/af/Default_avatar_profile.jpg',
+    },
+    email: {
+      type: String,
+      unique: true,
       required: true,
     },
     searchTitle: {
-      type: String,
-    },
-    email: {
       type: String,
     },
     password: {
@@ -30,13 +38,19 @@ const UserSchema = new Schema(
     playlists: [
       {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Track',
+        ref: 'Playlist',
       },
     ],
     albumsFollowed: [
       {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Album',
+      },
+    ],
+    likedTracks: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Track',
       },
     ],
     preferedGenre: [
@@ -59,6 +73,7 @@ const User = models?.User || mongoose.model('User', UserSchema);
 export default User;
 
 export interface UserDto {
+  id: string;
   username: string;
   searchTitle?: string;
   avatarImg?: string;
@@ -68,6 +83,7 @@ export interface UserDto {
   artistFollowed?: string[];
   playlists?: string[];
   albumsFollowed?: string[];
+  likedTracks?: string[];
   preferedGenre?: {
     genre: string;
     weight: number;

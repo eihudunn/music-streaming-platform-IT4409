@@ -1,0 +1,30 @@
+{
+    "sourceFile": "frontend/app/search/page.tsx",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 3,
+            "patches": [
+                {
+                    "date": 1717457346357,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                },
+                {
+                    "date": 1717457380087,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -0,0 +1,31 @@\n+import fakeGetSong from '@/actions/api/getSong';\r\n+import Header from '@/components/Header';\r\n+import SearchInput from '@/components/SearchInput';\r\n+import { SearchParamsContext } from 'next/dist/shared/lib/hooks-client-context.shared-runtime';\r\n+import SearchContent from './components/SearchContent';\r\n+\r\n+interface SearchProps {\r\n+  searchParams: {\r\n+    title: string;\r\n+  };\r\n+}\r\n+export const revalidate = 0;\r\n+\r\n+const Search = async ({ searchParams }: SearchProps) => {\r\n+  //TODO: connect api search\r\n+  const \r\n+\r\n+  return (\r\n+    <div className=\"bg-neutral-900 rounded-lg h-full w-full overflow-hidden overflow-y-auto\">\r\n+      <Header className=\"from-bg-neutral-900\">\r\n+        <div className=\"mb-2 flex flex-col gap-y-6\">\r\n+          <h1 className=\"text-white text-3xl font-semibold\">Search</h1>\r\n+          <SearchInput />\r\n+        </div>\r\n+      </Header>\r\n+      <SearchContent songs={songs} />\r\n+    </div>\r\n+  );\r\n+};\r\n+\r\n+export default Search;\r\n"
+                },
+                {
+                    "date": 1717457387907,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -12,9 +12,9 @@\n export const revalidate = 0;\r\n \r\n const Search = async ({ searchParams }: SearchProps) => {\r\n   //TODO: connect api search\r\n-  const songs = await \r\n+  const data = await \r\n \r\n   return (\r\n     <div className=\"bg-neutral-900 rounded-lg h-full w-full overflow-hidden overflow-y-auto\">\r\n       <Header className=\"from-bg-neutral-900\">\r\n"
+                },
+                {
+                    "date": 1717457479724,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -0,0 +1,31 @@\n+import fakeGetSong from '@/actions/api/getSong';\r\n+import Header from '@/components/Header';\r\n+import SearchInput from '@/components/SearchInput';\r\n+import { SearchParamsContext } from 'next/dist/shared/lib/hooks-client-context.shared-runtime';\r\n+import SearchContent from './components/SearchContent';\r\n+\r\n+interface SearchProps {\r\n+  searchParams: {\r\n+    title: string;\r\n+  };\r\n+}\r\n+export const revalidate = 0;\r\n+\r\n+const Search = async ({ searchParams }: SearchProps) => {\r\n+  //TODO: connect api search\r\n+  const data = await get\r\n+\r\n+  return (\r\n+    <div className=\"bg-neutral-900 rounded-lg h-full w-full overflow-hidden overflow-y-auto\">\r\n+      <Header className=\"from-bg-neutral-900\">\r\n+        <div className=\"mb-2 flex flex-col gap-y-6\">\r\n+          <h1 className=\"text-white text-3xl font-semibold\">Search</h1>\r\n+          <SearchInput />\r\n+        </div>\r\n+      </Header>\r\n+      <SearchContent songs={songs} />\r\n+    </div>\r\n+  );\r\n+};\r\n+\r\n+export default Search;\r\n"
+                }
+            ],
+            "date": 1717457346357,
+            "name": "Commit-0",
+            "content": "import fakeGetSong from '@/actions/api/getSong';\r\nimport Header from '@/components/Header';\r\nimport SearchInput from '@/components/SearchInput';\r\nimport { SearchParamsContext } from 'next/dist/shared/lib/hooks-client-context.shared-runtime';\r\nimport SearchContent from './components/SearchContent';\r\n\r\ninterface SearchProps {\r\n  searchParams: {\r\n    title: string;\r\n  };\r\n}\r\nexport const revalidate = 0;\r\n\r\nconst Search = async ({ searchParams }: SearchProps) => {\r\n  //TODO: connect api search\r\n  \r\n\r\n  return (\r\n    <div className=\"bg-neutral-900 rounded-lg h-full w-full overflow-hidden overflow-y-auto\">\r\n      <Header className=\"from-bg-neutral-900\">\r\n        <div className=\"mb-2 flex flex-col gap-y-6\">\r\n          <h1 className=\"text-white text-3xl font-semibold\">Search</h1>\r\n          <SearchInput />\r\n        </div>\r\n      </Header>\r\n      <SearchContent songs={songs} />\r\n    </div>\r\n  );\r\n};\r\n\r\nexport default Search;\r\n"
+        }
+    ]
+}

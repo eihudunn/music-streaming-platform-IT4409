@@ -1,0 +1,18 @@
+{
+    "sourceFile": "backend/routes/track.js",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 0,
+            "patches": [
+                {
+                    "date": 1717454372226,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                }
+            ],
+            "date": 1717454372226,
+            "name": "Commit-0",
+            "content": "const express = require(\"express\");\r\n\r\nconst {\r\n  getTracks,\r\n  uploadTrack,\r\n  deleteTrack,\r\n  updateTrack,\r\n  trackSuggestion,\r\n  getTracksById,\r\n  playTrack,\r\n  getTracksByUserId,\r\n  likeTracks,\r\n  unlikeTracks,\r\n  isTrackLiked,\r\n} = require(\"../controllers/track.controller\");\r\n\r\nconst router = express.Router();\r\nconst multer = require(\"multer\");\r\nconst path = require(\"path\");\r\n\r\nconst storage = multer.diskStorage({\r\n  destination: function (req, file, cb) {\r\n    cb(null, path.join(path.dirname(__dirname), \"services/temp\"));\r\n  },\r\n  filename: function (req, file, cb) {\r\n    cb(null, Date.now() + \"-\" + file.originalname.split(\" \").join(\"_\"));\r\n  },\r\n});\r\nconst upload = multer({ storage });\r\n\r\nrouter.get(\"/get\", getTracks);\r\nrouter.get(\"/get/:id\", getTracksById);\r\nrouter.get(\"/get/user/:userId\", getTracksByUserId);\r\nrouter.post(\r\n  \"/post\",\r\n  upload.fields([{ name: \"song\" }, { name: \"img\" }]),\r\n  uploadTrack\r\n);\r\nrouter.delete(\"/delete/:id\", deleteTrack);\r\n\r\nrouter.post(\r\n  \"/update/:id\",\r\n  upload.fields([{ name: \"song\" }, { name: \"img\" }]),\r\n  updateTrack\r\n);\r\n\r\nrouter.get(\"/suggestion/userid=:id\", trackSuggestion);\r\nrouter.post(\"/play\", playTrack);\r\nrouter.post(\"/like\", likeTracks);\r\nrouter.post(\"/unlike\", unlikeTracks);\r\nrouter.post(\"/is-liked\", isTrackLiked);\r\n\r\nmodule.exports = router;\r\n"
+        }
+    ]
+}

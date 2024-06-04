@@ -11,6 +11,7 @@ import toast from 'react-hot-toast';
 import { useRouter } from 'next/navigation';
 import createSong from '@/actions/song/createSong';
 import { useSession } from 'next-auth/react';
+import { Genre, GenreArr } from '@/const/genre';
 
 const UploadModal = () => {
   const uploadModal = useUploadModal();
@@ -106,6 +107,17 @@ const UploadModal = () => {
             {...register('image', { required: true })}
             accept="image/*"
           />
+        </div>
+        <div>
+          <div className="pb-1">Select a genre</div>
+          <select id="genre" {...register('genre', { required: true })}>
+            {GenreArr.map((genre) => (
+              <option key={genre} value={genre}>
+                {genre}
+              </option>
+            ))}
+            {/* Add more genres as needed */}
+          </select>
         </div>
         <Button disabled={isLoading} type="submit">
           Upload song

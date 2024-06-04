@@ -58,7 +58,7 @@ const PageContent: React.FC<PageContentProps> = ({ songs }) => {
       className="grid gap-4 mt-4 max-w-[1885px]"
       style={{ gridTemplateColumns: `repeat(${numColumns}, 1fr)` }}
     >
-      {songs.map((item, index) => {
+      {songs?.map((item, index) => {
         if (index < numColumns) {
           return (
             <SongItem

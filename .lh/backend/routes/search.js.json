@@ -1,0 +1,18 @@
+{
+    "sourceFile": "backend/routes/search.js",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 0,
+            "patches": [
+                {
+                    "date": 1717459793763,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                }
+            ],
+            "date": 1717459793763,
+            "name": "Commit-0",
+            "content": "const express = require(\"express\");\r\nconst { searchAll } = require(\"../controllers/search.controller\");\r\nconst router = express.Router();\r\n\r\nrouter.get(\"/\", searhAll);\r\n\r\nmodule.exports = router;\r\n"
+        }
+    ]
+}
