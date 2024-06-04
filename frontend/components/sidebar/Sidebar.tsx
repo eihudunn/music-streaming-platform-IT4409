@@ -12,11 +12,13 @@ import usePlayer from '@/hooks/usePlayer';
 import { twMerge } from 'tailwind-merge';
 import { useSession } from 'next-auth/react';
 import getSongByUserId from '@/actions/song/getSongByUserId';
+import getSongs from '@/actions/song/getSongs';
 import 'react-resizable/css/styles.css';
 import { Playlist } from '@/scheme/Playlist';
 import getPlaylistByUserId from '@/actions/playlist/getPlaylistByUserId';
 import Album from '@/scheme/Album';
 import getAlbumByUserId from '@/actions/album/getAlbumByUserId';
+import RightSidebar from '../rightSidebar/RightSidebar';
 
 interface SidebarProp {
   children: React.ReactNode;
@@ -153,6 +155,9 @@ const Sidebar: React.FC<SidebarProp> = ({ children }) => {
     [pathname],
   );
 
+  console.log('userSong', userSong);
+  console.log('session', session?.user?._doc._id);
+
   return (
     <div
       className={twMerge(
@@ -190,6 +195,14 @@ const Sidebar: React.FC<SidebarProp> = ({ children }) => {
       <main className="h-full flex-1 overflow-y-auto py-2 pr-2 rounded-lg">
         {children}
       </main>
+      <div
+        className={twMerge(
+          'hidden',
+          player.activeId && 'flex flex-col h-full py-2 pr-2 rounded-lg',
+        )}
+      >
+        <RightSidebar songs={userSong} />
+      </div>
     </div>
   );
 };

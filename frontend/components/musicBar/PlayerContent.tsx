@@ -28,6 +28,11 @@ const PlayerContent: React.FC<PlayerContentProps> = ({ song, songUrl }) => {
   const [volume, setVolume] = useState(1);
   const [prevVolume, setPrevVolume] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
+  const [isWaitList, setIsWaitList] = useState(false);
+  const handleWaitList = (active: boolean) => {
+    setIsWaitList(active);
+  };
+  
 
   const Icon = isPlaying ? BsPauseFill : BsPlayFill;
   // const VolumeIcon = volume === 0 ? HiSpeakerXMark : HiSpeakerWave;
@@ -152,7 +157,7 @@ const PlayerContent: React.FC<PlayerContentProps> = ({ song, songUrl }) => {
           <ConfigButton>
             <Microphone className="pl-2" />
           </ConfigButton>
-          <ConfigButton>
+          <ConfigButton sendActive={handleWaitList}>
             <WaitList className="pl-2" />
           </ConfigButton>
           <ConfigButton>

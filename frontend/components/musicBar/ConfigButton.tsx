@@ -4,14 +4,25 @@ import React, { useState } from 'react';
 
 interface ConfigButtonProp {
   children: React.ReactNode;
+  sendActive?: (active: boolean) => void;
 }
 
-const ConfigButton: React.FC<ConfigButtonProp> = ({ children }) => {
+const ConfigButton: React.FC<ConfigButtonProp> = ({ children, sendActive}) => {
   const [isActive, setIsActive] = useState(false);
+
+
+  const sendActiveToParent = () => {
+    if (sendActive) {
+      sendActive(isActive );
+    }
+  };
 
   const handleClick = () => {
     setIsActive(!isActive);
+    sendActiveToParent();
   };
+
+
 
   return (
     <button
@@ -31,6 +42,7 @@ const ConfigButton: React.FC<ConfigButtonProp> = ({ children }) => {
       "
       style={{ color: isActive ? '#1db954': 'white', opacity: isActive ? 1 : 0.7 }}
       onClick={handleClick}
+
     >
       {children}
       {isActive && (

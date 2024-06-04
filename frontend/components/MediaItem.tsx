@@ -23,7 +23,7 @@ const MediaItem: React.FC<MediaItemProps> = ({
   return (
     <div
       onClick={onClick}
-      className="flex items-center justify-between gap-x-3 cursor-pointer hover:bg-neutral-800/50 w-full p-2 rounded-md "
+      className="flex items-center justify-between gap-x-3 cursor-pointer hover:bg-neutral-800/50 w-full py-2 rounded-md "
     >
       <div className="flex items-center gap-x-3">
         <div
