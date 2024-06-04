@@ -7,12 +7,13 @@ interface ConfigButtonProp {
   sendActive?: (active: boolean) => void;
 }
 
-const ConfigButton: React.FC<ConfigButtonProp> = ({ children, sendActive }) => {
+const ConfigButton: React.FC<ConfigButtonProp> = ({ children, sendActive}) => {
   const [isActive, setIsActive] = useState(false);
+
 
   const sendActiveToParent = () => {
     if (sendActive) {
-      sendActive(isActive);
+      sendActive(isActive );
     }
   };
 
