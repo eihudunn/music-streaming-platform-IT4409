@@ -1,5 +1,5 @@
 'use client';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useSession } from 'next-auth/react';
 
 import CloseRightSidebar from './rightSidebar_Logos/CloseRightSidebar';
@@ -9,20 +9,32 @@ import MediaItem from '../MediaItem';
 import useOnPlay from '@/hooks/useOnPlay';
 import useGetSongById from '@/hooks/useGetSongById';
 import usePlayer from '@/hooks/usePlayer';
+import getSongs from '@/actions/song/getSongs';
+
 interface RightSidebarProps {
   songs: Song[];
 }
 
 const RightSidebar: React.FC<RightSidebarProps> = ({ songs }) => {
-  const onPlay = useOnPlay(songs);
+
+  const [waitList, setWaitList] = useState<Song[]>([]);
   const { data: session } = useSession();
 
   const player = usePlayer();
   const { song } = useGetSongById(player.activeId as string);
-  const nextSong = player.ids[player.ids.findIndex((id) => id === player.activeId) + 1];
-  const songUrl = song?.href;
-
   
+  useEffect(() => {
+    const fetchData = async () => {
+      const waitListData = await getSongs();
+      setWaitList(waitListData);
+    };
+
+    fetchData();
+  }, [session]);
+
+  const startIndex = waitList.findIndex((song) => song.id === player.activeId) ;
+  const sliceWaitList = startIndex !== -1 ? waitList.slice(startIndex + 1) : waitList;
+
   // right sidebar
   const [closeRightSidebar, setCloseRightSidebar] = useState(false);
   const handleCloseRightSidebar = () => {
@@ -65,10 +77,15 @@ const RightSidebar: React.FC<RightSidebarProps> = ({ songs }) => {
         <div className="flex flex-col gap-y-2 px-5">
           <p className="text-white font-medium text-md">Next up</p>
           <div className="flex flex-col gap-y-2 mt-4 px-3">            
-             
-              <MediaItem
+          {sliceWaitList.map((item) => (
+          <MediaItem
+            key={item.id}
+            data={item}
+          />
+        ))}
+              {/* <MediaItem
                 data={nextSong}
-              />
+              /> */}
           </div>
 
         </div>

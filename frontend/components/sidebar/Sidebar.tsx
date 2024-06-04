@@ -155,6 +155,9 @@ const Sidebar: React.FC<SidebarProp> = ({ children }) => {
     [pathname],
   );
 
+  console.log('userSong', userSong);
+  console.log('session', session?.user?._doc._id);
+
   return (
     <div
       className={twMerge(
@@ -198,7 +201,7 @@ const Sidebar: React.FC<SidebarProp> = ({ children }) => {
           player.activeId && 'flex flex-col h-full py-2 pr-2 rounded-lg',
         )}
       >
-        <RightSidebar songs={getSongs()} />
+        <RightSidebar songs={userSong} />
       </div>
     </div>
   );
