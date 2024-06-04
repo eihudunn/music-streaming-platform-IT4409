@@ -1,4 +1,7 @@
 import mongoose, { models, Schema } from 'mongoose';
+import Album from './Album';
+import { Song } from './Song';
+import { Playlist } from './Playlist';
 
 const UserSchema = new Schema(
   {
@@ -80,10 +83,10 @@ export interface UserDto {
   email?: string;
   password?: string;
   following?: string[];
-  artistFollowed?: string[];
-  playlists?: string[];
-  albumsFollowed?: string[];
-  likedTracks?: string[];
+  artistFollowed?: UserDto[];
+  playlists?: Playlist[];
+  albumsFollowed?: Album[];
+  likedTracks?: Song[];
   preferedGenre?: {
     genre: string;
     weight: number;

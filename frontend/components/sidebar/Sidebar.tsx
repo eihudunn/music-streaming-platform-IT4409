@@ -17,6 +17,8 @@ import { Playlist } from '@/scheme/Playlist';
 import getPlaylistByUserId from '@/actions/playlist/getPlaylistByUserId';
 import Album from '@/scheme/Album';
 import getAlbumByUserId from '@/actions/album/getAlbumByUserId';
+import { UserDto } from '@/scheme/User';
+import getUserById from '@/actions/user/getUserById';
 
 interface SidebarProp {
   children: React.ReactNode;
@@ -24,6 +26,18 @@ interface SidebarProp {
 
 const Sidebar: React.FC<SidebarProp> = ({ children }) => {
   const { data: session } = useSession();
+
+  const [user, setUser] = useState<UserDto>();
+
+  useEffect(() => {
+    const getUser = async () => {
+      const res = await getUserById(session?.user?._doc._id);
+      setUser(res as UserDto);
+    };
+    if (session) {
+      getUser();
+    }
+  }, [session]);
 
   const [userSong, setUserSong] = useState<Song[]>([]);
 
@@ -61,13 +75,24 @@ const Sidebar: React.FC<SidebarProp> = ({ children }) => {
     }
   }, [session]);
 
-  const [userContent, setUserContent] = useState<(Song | Playlist | Album)[]>(
-    [],
-  );
+  const [userContent, setUserContent] = useState<
+    (Song | Playlist | Album | UserDto)[]
+  >([]);
+
+  // useEffect(() => {
+  //   setUserContent([...userSong, ...userPlaylists, ...userAlbums]);
+  // }, [userSong, userPlaylists, userAlbums]);
 
   useEffect(() => {
-    setUserContent([...userSong, ...userPlaylists, ...userAlbums]);
-  }, [userSong, userPlaylists, userAlbums]);
+    if (user) {
+      setUserContent([
+        ...(user.artistFollowed ?? []),
+        ...(user.albumsFollowed ?? []),
+        ...(user.likedTracks ?? []),
+        ...(user.playlists ?? []),
+      ]);
+    }
+  }, [user]);
 
   const [sidebarWidth, setSidebarWidth] = useState(400); // initial sidebar width
   const resizerRef = useRef(null);
@@ -105,14 +130,13 @@ const Sidebar: React.FC<SidebarProp> = ({ children }) => {
 
         let cw = w + dx; // complete width
 
-        if (cw > 1600 ) {
+        if (cw > 1600) {
           cw = 1600;
         } else if (cw < 300) {
           cw = 300;
-        } 
+        }
 
         setSidebarWidth(cw);
-
       }
 
       function rs_mouseupHandler() {
@@ -180,11 +204,11 @@ const Sidebar: React.FC<SidebarProp> = ({ children }) => {
         // className="resizer hidden md:flex w-[1px] mx-1 cursor-grab h-full hover:bg-[#727272]"
         className="resizer hidden md:flex w-2 py-2 cursor-grab h-full items-center justify-center opacity-0 hover:opacity-100 active:opacity-100"
       >
-        <div 
-        className="w-[1px] h-[calc(100%-16px)] bg-white  "
-        style={{ 
-          opacity: isHoveredResizeBar ? 1 : 0.5,
-        }}
+        <div
+          className="w-[1px] h-[calc(100%-16px)] bg-white  "
+          style={{
+            opacity: isHoveredResizeBar ? 1 : 0.5,
+          }}
         ></div>
       </div>
       <main className="h-full flex-1 overflow-y-auto py-2 pr-2 rounded-lg">

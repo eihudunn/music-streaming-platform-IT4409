@@ -18,26 +18,53 @@ const SignupComponent = () => {
   const [isEmailNotMatch, setIsEmailNotMatch] = useState(false);
 
   const handleSignUp = async () => {
-    if (!isEmailNotMatch) {
-      console.log(data);
-      try {
-        const register = await axios.post(
-          'http://localhost:3000/api/register',
-          data,
-          {
-            headers: {
-              'Content-Type': 'application/json',
-            },
-          },
-        );
-        toast.success('Account Created Successfully');
-        console.log(register);
-      } catch (error) {
-        console.error(error);
-        toast.error('Account Creation Failed');
-      }
+    const { username, email, password } = data;
+
+    // Check if all fields are filled
+    if (!username || !email || !password || !confirmEmail) {
+      toast.error('Please fill in all fields');
+      return;
     }
-    //  console.log(data);
+
+    // Check if email is valid
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      toast.error('Please enter a valid email');
+      return;
+    }
+
+    // Check if emails match
+    if (email !== confirmEmail) {
+      toast.error('Emails do not match');
+      return;
+    }
+
+    // Check if password is strong
+    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/;
+    if (!passwordRegex.test(password)) {
+      toast.error(
+        'Password should be minimum eight characters, at least one uppercase letter, one lowercase letter and one number',
+      );
+      return;
+    }
+
+    // If all checks pass, make the API call
+    try {
+      const register = await axios.post(
+        'http://localhost:3000/api/register',
+        data,
+        {
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        },
+      );
+      toast.success('Account Created Successfully');
+      console.log(register);
+    } catch (error) {
+      console.error(error);
+      toast.error('Account Creation Failed');
+    }
   };
 
   useEffect(() => {
@@ -99,9 +126,9 @@ const SignupComponent = () => {
             className="my-6"
           />
         </div>
-        <div className=" w-full flex items-center justify-center     my-8">
+        <div className=" w-full flex items-center justify-center my-8">
           <button
-            className="bg-signature-color font-semibold p-3 px-10 rounded-full"
+            className="bg-[#1ed760] w-full font-semibold p-3 px-10 rounded-full"
             onClick={handleSignUp}
           >
             Sign Up
@@ -111,7 +138,7 @@ const SignupComponent = () => {
         <div className="my-6 font-semibold text-lg">
           Already have an account?
         </div>
-        <div className="border border-gray-500 text-gray-500 w-full flex items-center justify-center py-4 rounded-full font-bold">
+        <div className="border border-gray-500 text-gray-500 w-full flex items-center justify-center py-4 rounded-full font-bold bg-slate-900">
           <Link href="/login">LOG IN INSTEAD</Link>
         </div>
       </div>

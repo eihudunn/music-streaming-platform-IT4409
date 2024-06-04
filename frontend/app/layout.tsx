@@ -12,7 +12,7 @@ import UserProvider from '@/providers/UserProvider';
 const font = Figtree({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
-  title: 'Spotify Clone',
+  title: 'Hustify',
   description: 'Listen to music',
 };
 
